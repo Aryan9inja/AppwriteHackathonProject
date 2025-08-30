@@ -1,5 +1,5 @@
 import React from 'react';
-import { Clock, FileText, Eye, Globe, User, BarChart3, Star } from 'lucide-react';
+import { Clock, BarChart3, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface Activity {

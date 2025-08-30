@@ -17,7 +17,7 @@ export const registerUser = async (formData: SignUpFormData) => {
     });
     const user = await account.get();
     return user;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.log("SignUp Failed", error);
     throw error;
   }
@@ -31,7 +31,7 @@ export const loginUser = async (formData: LoginFormData) => {
     });
     const user = await account.get();
     return user;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.log("Login Failed", error);
     throw error;
   }

@@ -165,5 +165,6 @@ const LoadingSkeleton = React.forwardRef<HTMLDivElement, LoadingSkeletonProps>(
 
 LoadingSkeleton.displayName = "LoadingSkeleton"
 
+// eslint-disable-next-line react-refresh/only-export-components
 export { Loader, FullScreenLoader, LoadingSkeleton, loaderVariants }
 export type { LoaderProps, FullScreenLoaderProps, LoadingSkeletonProps }

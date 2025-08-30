@@ -60,16 +60,17 @@ const LoginForm = () => {
       });
 
       navigate("/dashboard");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
       toast.dismiss(loadingToast);
 
       // Handle Appwrite specific errors
+      const err = error as { code?: number; message?: string };
       if (
-        error?.code === 401 ||
-        error?.message?.includes("Invalid credentials") ||
-        error?.message?.includes("unauthorized") ||
-        error?.message?.includes("AppwriteException: Invalid credentials")
+        err?.code === 401 ||
+        err?.message?.includes("Invalid credentials") ||
+        err?.message?.includes("unauthorized") ||
+        err?.message?.includes("AppwriteException: Invalid credentials")
       ) {
         toast.error("Invalid credentials", {
           description:
@@ -77,9 +78,9 @@ const LoginForm = () => {
           duration: 6000,
         });
       } else if (
-        error?.code === 404 || 
-        error?.message?.includes("not found") ||
-        error?.message?.includes("User not found")
+        err?.code === 404 || 
+        err?.message?.includes("not found") ||
+        err?.message?.includes("User not found")
       ) {
         toast.error("Account not found", {
           description:
@@ -87,39 +88,39 @@ const LoginForm = () => {
           duration: 6000,
         });
       } else if (
-        error?.code === 400 &&
-        (error?.message?.includes("email") || error?.message?.includes("Email"))
+        err?.code === 400 &&
+        (err?.message?.includes("email") || err?.message?.includes("Email"))
       ) {
         toast.error("Invalid email format", {
           description: "Please enter a valid email address.",
           duration: 5000,
         });
       } else if (
-        error?.code === 400 &&
-        (error?.message?.includes("password") || error?.message?.includes("Password"))
+        err?.code === 400 &&
+        (err?.message?.includes("password") || err?.message?.includes("Password"))
       ) {
         toast.error("Password issue", {
           description: "Please check your password and try again.",
           duration: 5000,
         });
       } else if (
-        error?.message?.includes("network") ||
-        error?.message?.includes("connection") ||
-        error?.message?.includes("fetch") ||
-        error?.code === 500
+        err?.message?.includes("network") ||
+        err?.message?.includes("connection") ||
+        err?.message?.includes("fetch") ||
+        err?.code === 500
       ) {
         toast.error("Connection failed", {
           description: "Please check your internet connection and try again.",
           duration: 6000,
         });
-      } else if (error?.code === 429) {
+      } else if (err?.code === 429) {
         toast.error("Too many login attempts", {
           description: "Please wait a moment before trying to sign in again.",
           duration: 7000,
         });
-      } else if (error?.message?.includes("AppwriteException")) {
+      } else if (err?.message?.includes("AppwriteException")) {
         // Generic Appwrite error handling
-        const cleanMessage = error.message.replace("AppwriteException:", "").trim();
+        const cleanMessage = err.message.replace("AppwriteException:", "").trim();
         toast.error("Login failed", {
           description: cleanMessage || "An error occurred while signing in. Please try again.",
           duration: 6000,
@@ -127,7 +128,7 @@ const LoginForm = () => {
       } else {
         toast.error("Sign in failed", {
           description:
-            error?.message ||
+            err?.message ||
             "Something went wrong during sign in. Please try again in a moment.",
           duration: 6000,
         });

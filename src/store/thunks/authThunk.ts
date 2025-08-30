@@ -10,8 +10,9 @@ export const registerUserThunk = createAsyncThunk(
       await registerUser(formData);
       const userData = await getUserData();
       return userData;
-    } catch (error: any) {
-      return rejectWithValue(error.message || "Registration failed");
+    } catch (error: unknown) {
+      const err = error as { message?: string };
+      return rejectWithValue(err.message || "Registration failed");
     }
   }
 );
@@ -24,8 +25,9 @@ export const loginUserThunk = createAsyncThunk(
       await loginUser(formData);
       const userData = await getUserData();
       return userData;
-    } catch (error: any) {
-      return rejectWithValue(error.message || "Login failed");
+    } catch (error: unknown) {
+      const err = error as { message?: string };
+      return rejectWithValue(err.message || "Login failed");
     }
   }
 );
@@ -37,8 +39,9 @@ export const logoutUserThunk = createAsyncThunk(
     try {
       await logout();
       return null;
-    } catch (error: any) {
-      return rejectWithValue(error.message || "Logout failed");
+    } catch (error: unknown) {
+      const err = error as { message?: string };
+      return rejectWithValue(err.message || "Logout failed");
     }
   }
 );
@@ -50,8 +53,9 @@ export const getUserDataThunk = createAsyncThunk(
     try {
       const user=await getUserData();
       return user;
-    } catch (error: any) {
-      return rejectWithValue(error?.message || "Failed to fetch user");
+    } catch (error: unknown) {
+      const err = error as { message?: string };
+      return rejectWithValue(err?.message || "Failed to fetch user");
     }
   }
 );

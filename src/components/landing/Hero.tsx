@@ -1,4 +1,4 @@
-import { ArrowRight, Sparkles, Users, Star, Zap, Eye } from "lucide-react";
+import { ArrowRight, Users, Star, Zap, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 

@@ -65,41 +65,42 @@ const SignupForm = () => {
       });
 
       form.reset();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
       toast.dismiss(loadingToast);
 
+      const err = error as { code?: number; message?: string };
       if (
-        error?.code === 409 ||
-        error?.message?.includes("user_already_exists") ||
-        error?.message?.includes("already exists")
+        err?.code === 409 ||
+        err?.message?.includes("user_already_exists") ||
+        err?.message?.includes("already exists")
       ) {
         toast.error("Email already registered", {
           description:
             "This email is already associated with an account. Try signing in instead.",
           duration: 6000,
         });
-      } else if (error?.code === 400 && error?.message?.includes("password")) {
+      } else if (err?.code === 400 && err?.message?.includes("password")) {
         toast.error("Password requirements not met", {
           description:
             "Password must be at least 8 characters with letters and numbers.",
           duration: 6000,
         });
-      } else if (error?.code === 400 && error?.message?.includes("email")) {
+      } else if (err?.code === 400 && err?.message?.includes("email")) {
         toast.error("Invalid email format", {
           description: "Please enter a valid email address.",
           duration: 5000,
         });
       } else if (
-        error?.message?.includes("network") ||
-        error?.message?.includes("connection") ||
-        error?.code === 500
+        err?.message?.includes("network") ||
+        err?.message?.includes("connection") ||
+        err?.code === 500
       ) {
         toast.error("Connection failed", {
           description: "Please check your internet connection and try again.",
           duration: 6000,
         });
-      } else if (error?.code === 429) {
+      } else if (err?.code === 429) {
         toast.error("Too many attempts", {
           description: "Please wait a moment before trying again.",
           duration: 7000,
@@ -107,7 +108,7 @@ const SignupForm = () => {
       } else {
         toast.error("Account creation failed", {
           description:
-            error?.message ||
+            err?.message ||
             "Something went wrong. Please try again in a moment.",
           duration: 6000,
         });
