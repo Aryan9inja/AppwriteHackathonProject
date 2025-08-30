@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import type { RootState, AppDispatch } from "@/store/store";
 import { useEffect } from "react";
 import { getUserDataThunk } from "@/store/thunks/authThunk";
+import { FullScreenLoader } from "@/components/ui/loader";
 
 function App() {
   const dispatch = useDispatch<AppDispatch>();
@@ -12,7 +13,16 @@ function App() {
     dispatch(getUserDataThunk());
   }, [dispatch]);
 
-  if (loadingType==="user") return <div>Loading...</div>;
+  if (loadingType==="user") {
+    return (
+      <FullScreenLoader 
+        message="Verifying your authentication"
+        type="gradient"
+        variant="default"
+      />
+    );
+  }
+  
   return (
     <>
       <Toaster position="top-right" richColors />
