@@ -1,1 +1,258 @@
-@import "tailwindcss"
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  /* Radii */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* Base design tokens mapped to Tailwind variables */
+  --color-background: var(--color-bg);
+  --color-foreground: var(--color-text);
+  --color-card: var(--color-card);
+  --color-card-foreground: var(--color-text);
+  --color-border: var(--color-border);
+  --color-muted: var(--color-muted);
+  --color-muted-foreground: var(--color-muted-hover);
+
+  /* Primary / Secondary */
+  --color-primary: var(--color-primary);
+  --color-primary-hover: var(--color-primary-hover);
+  --color-primary-focus: var(--color-primary-focus);
+  --color-primary-foreground: var(--color-bg);
+  --color-secondary: var(--color-secondary);
+  --color-secondary-hover: var(--color-secondary-hover);
+  --color-secondary-focus: var(--color-secondary-focus);
+  --color-secondary-foreground: var(--color-bg);
+
+  /* Feedback colors */
+  --color-success: var(--color-success);
+  --color-success-hover: var(--color-success-hover);
+  --color-success-focus: var(--color-success-focus);
+  --color-warning: var(--color-warning);
+  --color-warning-hover: var(--color-warning-hover);
+  --color-warning-focus: var(--color-warning-focus);
+  --color-error: var(--color-error);
+  --color-error-hover: var(--color-error-hover);
+  --color-error-focus: var(--color-error-focus);
+  --color-info: var(--color-info);
+  --color-info-hover: var(--color-info-hover);
+  --color-info-focus: var(--color-info-focus);
+
+  /* Sidebar + Charts (still customizable if needed) */
+  --color-sidebar: var(--color-card);
+  --color-sidebar-foreground: var(--color-text);
+  --color-sidebar-border: var(--color-border);
+  --color-sidebar-ring: var(--color-primary);
+  --color-chart-1: #7c3aed;
+  --color-chart-2: #ec4899;
+  --color-chart-3: #22c55e;
+  --color-chart-4: #f59e0b;
+  --color-chart-5: #0ea5e9;
+}
+
+:root {
+  --radius: 0.625rem;
+
+  /* === Light Theme (default) === */
+  --color-bg: #fefefe;
+  --color-text: #0f172a;
+  --color-card: #ffffff;
+  --color-border: #e2e8f0;
+  --color-muted: #64748b;
+  --color-muted-hover: #475569;
+
+  /* Primary - Purple gradient */
+  --color-primary: #8b5cf6;
+  --color-primary-hover: #7c3aed;
+  --color-primary-focus: #6d28d9;
+
+  /* Secondary - Pink gradient */
+  --color-secondary: #ec4899;
+  --color-secondary-hover: #db2777;
+  --color-secondary-focus: #be185d;
+
+  /* Feedback */
+  --color-success: #22c55e;
+  --color-success-hover: #16a34a;
+  --color-success-focus: #15803d;
+
+  --color-warning: #f59e0b;
+  --color-warning-hover: #d97706;
+  --color-warning-focus: #b45309;
+
+  --color-error: #ef4444;
+  --color-error-hover: #dc2626;
+  --color-error-focus: #b91c1c;
+
+  --color-info: #0ea5e9;
+  --color-info-hover: #0284c7;
+  --color-info-focus: #0369a1;
+}
+
+.dark {
+  /* === Dark Theme === */
+  --color-bg: #0f172a;
+  --color-text: #f8fafc;
+  --color-card: #1e293b;
+  --color-border: #334155;
+  --color-muted: #94a3b8;
+  --color-muted-hover: #e2e8f0;
+
+  /* Primary - Lighter purple for dark mode */
+  --color-primary: #a78bfa;
+  --color-primary-hover: #8b5cf6;
+  --color-primary-focus: #7c3aed;
+
+  /* Secondary - Lighter pink for dark mode */
+  --color-secondary: #f472b6;
+  --color-secondary-hover: #ec4899;
+  --color-secondary-focus: #db2777;
+
+  /* Feedback */
+  --color-success: #4ade80;
+  --color-success-hover: #22c55e;
+  --color-success-focus: #16a34a;
+
+  --color-warning: #fbbf24;
+  --color-warning-hover: #f59e0b;
+  --color-warning-focus: #d97706;
+
+  --color-error: #f87171;
+  --color-error-hover: #ef4444;
+  --color-error-focus: #dc2626;
+
+  --color-info: #38bdf8;
+  --color-info-hover: #0ea5e9;
+  --color-info-focus: #0284c7;
+}
+
+/* Custom animations for landing page */
+@keyframes bounce-subtle {
+  0%, 100% { 
+    transform: translateY(0); 
+  }
+  50% { 
+    transform: translateY(-2px); 
+  }
+}
+
+.animate-bounce-subtle {
+  animation: bounce-subtle 2s infinite;
+}
+
+/* Custom animations for dashboard */
+@keyframes fade-in {
+  0% { 
+    opacity: 0; 
+    transform: translateY(10px); 
+  }
+  100% { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+@keyframes slide-in {
+  0% { 
+    opacity: 0; 
+    transform: translateX(-10px); 
+  }
+  100% { 
+    opacity: 1; 
+    transform: translateX(0); 
+  }
+}
+
+@keyframes scale-in {
+  0% { 
+    opacity: 0; 
+    transform: scale(0.9); 
+  }
+  100% { 
+    opacity: 1; 
+    transform: scale(1); 
+  }
+}
+
+@keyframes shimmer {
+  0% { 
+    background-position: -200% 0; 
+  }
+  100% { 
+    background-position: 200% 0; 
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out forwards;
+}
+
+.animate-slide-in {
+  animation: slide-in 0.5s ease-out forwards;
+  opacity: 0;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.4s ease-out forwards;
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Hover effects */
+.hover-lift {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Gradient text effect */
+.gradient-text {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Floating animation */
+@keyframes float {
+  0%, 100% { 
+    transform: translateY(0px); 
+  }
+  50% { 
+    transform: translateY(-10px); 
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Custom responsive utilities for extra small screens */
+@media (min-width: 475px) {
+  .xs\:block { display: block; }
+  .xs\:hidden { display: none; }
+  .xs\:inline { display: inline; }
+  .xs\:flex { display: flex; }
+}
+
+/* Hide scrollbar but keep functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
