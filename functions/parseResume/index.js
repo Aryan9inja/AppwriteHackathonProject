@@ -21,7 +21,13 @@ module.exports = async ({ req, res, log, error }) => {
       process.env.RESUME_BUCKET_ID,
       fileId
     );
-    const buffer = Buffer.from(await response.arrayBuffer());
+
+    const chunks = [];
+    for await (const chunk of response) {
+      chunks.push(chunk);
+    }
+    const buffer = Buffer.concat(chunks);
+
     const pdfData = await pdfParse(buffer);
 
     const resumeText = pdfData.text;
