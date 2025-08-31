@@ -1,7 +1,6 @@
 const sdk = require("node-appwrite");
 const axios = require("axios");
 const pdfParse = require("pdf-parse");
-const { Permission, Role } = require("node-appwrite");
 
 module.exports = async ({ req, res, log, error }) => {
   try {
@@ -29,7 +28,6 @@ module.exports = async ({ req, res, log, error }) => {
     const pdfData = await pdfParse(buffer);
 
     const resumeText = pdfData.text;
-    4;
     console.log("Loda", resumeText);
 
     const prompt = `
@@ -121,10 +119,10 @@ module.exports = async ({ req, res, log, error }) => {
         data: JSON.stringify(portfolioData),
       },
       [
-        Permission.write(Role.user(userId)),
-        Permission.read(Role.user(userId)),
-        Permission.update(Role.user(userId)),
-        Permission.delete(Role.user(userId)),
+        `write("user:${userId}")`,
+        `read("user:${userId}")`,
+        `update("user:${userId}")`,
+        `delete("user:${userId}")`,
       ]
     );
 
