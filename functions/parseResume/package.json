@@ -1,0 +1,19 @@
+{
+  "name": "parse_resume",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "module": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.14.0",
+  "dependencies": {
+    "axios": "^1.11.0",
+    "node-appwrite": "^18.0.0",
+    "pdf-parse": "^1.1.1"
+  }
+}
