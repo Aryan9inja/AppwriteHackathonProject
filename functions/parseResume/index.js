@@ -17,12 +17,18 @@ export default async ({ req, res, log, error }) => {
       return res.json({ error: "userId and fileId are required" }, 400);
     }
 
-    const fileBuffer = await storage.getFileDownload(
+    const response = await storage.getFileDownload(
       process.env.RESUME_BUCKET_ID,
       fileId
     );
 
-    const pdfData = await pdfParse(Buffer.from(fileBuffer));
+    const chunks = [];
+    for await (const chunk of response) {
+      chunks.push(chunk);
+    }
+    const buffer = Buffer.concat(chunks);
+
+    const pdfData = await pdfParse(Buffer.from(buffer));
     const resumeText = pdfData.text;
 
     const prompt = `
