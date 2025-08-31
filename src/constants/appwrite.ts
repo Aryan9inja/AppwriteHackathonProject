@@ -5,3 +5,8 @@ export const TABLE_PORTFOLIOS: string = import.meta.env
   .VITE_APPWRITE_TABLE_PORTFOLIOS!;
 export const TABLE_TEMPLATES: string = import.meta.env
   .VITE_APPWRITE_TABLE_TEMPLATES!;
+
+export const RESUME_BUCKET: string = import.meta.env
+  .VITE_APPWRITE_RESUME_BUCKET;
+export const PARSE_RESUME_FUNC = import.meta.env
+  .VITE_APPWRITE_PARSE_RESUME_FUNC;
