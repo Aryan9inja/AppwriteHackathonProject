@@ -93,7 +93,7 @@ module.exports = async ({ req, res, log, error }) => {
     ${resumeText}
     `;
 
-    const aiResponse = await axios.get(
+    const aiResponse = await axios.post(
       "https://openrouter.ai/api/v1/chat/completions",
       {
         headers: {
