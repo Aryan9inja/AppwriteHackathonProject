@@ -1,4 +1,4 @@
-import sdk from "node-appwrite";
+import * as sdk from "node-appwrite";
 import axios from "axios";
 import pdfParse from "pdf-parse";
 
