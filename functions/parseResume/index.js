@@ -1,6 +1,7 @@
 const sdk = require("node-appwrite");
 const axios = require("axios");
 const pdfParse = require("pdf-parse");
+const { ID } = require("node-appwrite");
 
 module.exports = async ({ req, res, log, error }) => {
   try {
@@ -110,21 +111,21 @@ module.exports = async ({ req, res, log, error }) => {
     const portfolioData =
       aiResponse.data.choices?.[0]?.message?.content || "{}";
 
-    const newDoc = await tables.createTable(
-      process.env.DATABASE_ID,
-      process.env.PORTFOLIO_TABLE_ID,
-      "unique()",
-      {
+    const newDoc = await tables.createRow({
+      databaseId: process.env.DATABASE_ID,
+      tableId: process.env.PORTFOLIO_TABLE_ID,
+      rowId: ID.unique(),
+      data: {
         userId,
         data: JSON.stringify(portfolioData),
       },
-      [
+      permissions: [
         `write("user:${userId}")`,
         `read("user:${userId}")`,
         `update("user:${userId}")`,
         `delete("user:${userId}")`,
-      ]
-    );
+      ],
+    });
 
     return res.json({ success: true, docId: newDoc.$id });
   } catch (err) {
