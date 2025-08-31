@@ -16,6 +16,7 @@ module.exports = async ({ req, res, log, error }) => {
     if (!userId || !fileId) {
       return res.json({ error: "userId and fileId are required" }, 400);
     }
+    console.log("Bhenchod", userId, "....", fileId);
 
     const response = await storage.getFileDownload(
       process.env.RESUME_BUCKET_ID,
@@ -26,7 +27,8 @@ module.exports = async ({ req, res, log, error }) => {
 
     const pdfData = await pdfParse(buffer);
 
-    const resumeText = pdfData.text;
+    const resumeText = pdfData.text;4
+    console.log("Loda",resumeText);
 
     const prompt = `
     You are a professional resume parser. Extract detailed portfolio information from this resume and return ONLY valid JSON with no additional text.
