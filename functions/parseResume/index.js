@@ -116,6 +116,7 @@ module.exports = async ({ req, res, log, error }) => {
       data: {
         userId,
         data: JSON.stringify(portfolioData),
+        resumeId:fileId
       },
       permissions: [
         `write("user:${userId}")`,
