@@ -1,8 +1,8 @@
-import * as sdk from "node-appwrite";
-import axios from "axios";
-import pdfParse from "pdf-parse";
+const sdk = require("node-appwrite");
+const axios = require("axios");
+const pdfParse = require("pdf-parse");
 
-export default async ({ req, res, log, error }) => {
+module.exports = async ({ req, res, log, error }) => {
   try {
     const client = new sdk.Client()
       .setEndpoint(process.env.APPWRITE_ENDPOINT)
