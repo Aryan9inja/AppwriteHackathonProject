@@ -32,7 +32,7 @@ module.exports = async ({ req, res, log, error }) => {
     console.log("Loda", resumeText);
 
     const prompt = `
-    You are a professional resume parser. Extract detailed portfolio information from this resume and return ONLY valid JSON with no additional text.
+    You are a professional resume parser. Extract detailed portfolio information from this resume and return ONLY valid JSON with no additional text. You MUST respond with ONLY valid JSON, no explanations, no markdown, no text before or after the JSON.
 
     Return the data in this exact structure:
     {
