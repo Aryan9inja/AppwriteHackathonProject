@@ -117,8 +117,13 @@ module.exports = async ({ req, res, log, error }) => {
       "unique()",
       {
         userId,
-        data: JSON.stringify(JSON.parse(portfolioData)),
-      }
+        data: JSON.stringify(parsedData),
+      },
+      [
+        Permission.read(Role.user(userId)),
+        Permission.update(Role.user(userId)),
+        Permission.delete(Role.user(userId)),
+      ]
     );
 
     return res.json({ success: true, docId: newDoc.$id });
