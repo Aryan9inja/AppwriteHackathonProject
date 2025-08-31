@@ -27,8 +27,9 @@ module.exports = async ({ req, res, log, error }) => {
 
     const pdfData = await pdfParse(buffer);
 
-    const resumeText = pdfData.text;4
-    console.log("Loda",resumeText);
+    const resumeText = pdfData.text;
+    4;
+    console.log("Loda", resumeText);
 
     const prompt = `
     You are a professional resume parser. Extract detailed portfolio information from this resume and return ONLY valid JSON with no additional text.
@@ -96,19 +97,19 @@ module.exports = async ({ req, res, log, error }) => {
     const aiResponse = await axios.post(
       "https://openrouter.ai/api/v1/chat/completions",
       {
+        model: "meta-llama/llama-4-maverick:free",
+        messages: [{ role: "user", content: prompt }],
+      },
+      {
         headers: {
           Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          model: "meta-llama/llama-4-maverick:free",
-          messages: [{ role: "user", content: prompt }],
-        }),
       }
     );
 
-    const result = await aiResponse.json();
-    const portfolioData = result.choices?.[0]?.message?.content || "{}";
+    const portfolioData =
+      aiResponse.data.choices?.[0]?.message?.content || "{}";
 
     const newDoc = await tables.createTable(
       process.env.DATABASE_ID,
