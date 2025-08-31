@@ -22,11 +22,7 @@ module.exports = async ({ req, res, log, error }) => {
       fileId
     );
 
-    const chunks = [];
-    for await (const chunk of response) {
-      chunks.push(chunk);
-    }
-    const buffer = Buffer.concat(chunks);
+    const buffer = Buffer.isBuffer(response) ? response : Buffer.from(response);
 
     const pdfData = await pdfParse(buffer);
 
