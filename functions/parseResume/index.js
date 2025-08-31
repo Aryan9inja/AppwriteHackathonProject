@@ -117,7 +117,7 @@ module.exports = async ({ req, res, log, error }) => {
       "unique()",
       {
         userId,
-        data: JSON.stringify(parsedData),
+        data: JSON.stringify(portfolioData),
       },
       [
         Permission.read(Role.user(userId)),
