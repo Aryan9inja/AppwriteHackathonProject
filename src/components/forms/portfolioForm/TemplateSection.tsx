@@ -39,7 +39,7 @@ const TemplateSection: React.FC<TemplateSectionProps> = ({
             {/* Template Preview */}
             <div className={`aspect-[3/4] rounded-md mb-3 relative overflow-hidden ${template.color}`}>
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-white font-bold text-lg opacity-75">
+                <div className="text-gray-600 font-bold text-lg opacity-75">
                   {template.name}
                 </div>
               </div>
