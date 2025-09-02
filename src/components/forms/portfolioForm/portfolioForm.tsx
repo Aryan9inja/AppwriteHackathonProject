@@ -6,7 +6,8 @@ import {
   type PortfolioFormData,
 } from "@/schemas/portfolio.schema";
 import { Button } from "@/components/ui/button";
-import { Save, Eye } from "lucide-react";
+import { Save, Eye, X } from "lucide-react";
+import { PORTFOLIO_TEMPLATES, TemplateKey } from "@/components/portfolioTemplates";
 
 // Import modular sections
 import PersonalInfoSection from "./PersonalInfoSection";
@@ -18,20 +19,20 @@ import CertificationsSection from "./CertificationsSection";
 import LanguagesSection from "./LanguagesSection";
 import SocialLinksSection from "./SocialLinksSection";
 import TemplateSection from "./TemplateSection";
+import { PortfolioData } from "@/types/types";
+import { getPortfolioData } from "@/services/portfolio.services";
+import { useLocation } from "react-router-dom";
 
 interface PortfolioFormProps {
-  documentId?: string;
-  initialData?: Partial<PortfolioFormData>;
   onSubmit: (data: PortfolioFormData) => Promise<void>;
 }
 
-const PortfolioForm: React.FC<PortfolioFormProps> = ({
-  documentId,
-  initialData,
-  onSubmit,
-}) => {
+const PortfolioForm: React.FC<PortfolioFormProps> = ({ onSubmit }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<string>("");
+  const [showPreview, setShowPreview] = useState(false);
+  const location = useLocation();
+  const { docId } = location.state;
 
   const form = useForm<PortfolioFormData>({
     resolver: zodResolver(portfolioSchema),
@@ -102,92 +103,81 @@ const PortfolioForm: React.FC<PortfolioFormProps> = ({
 
   // Load initial data if provided
   useEffect(() => {
-    if (initialData) {
-      form.reset({
-        ...initialData,
-        skills: initialData.skills?.length ? initialData.skills : [""],
-        experience: initialData.experience?.length
-          ? initialData.experience
-          : [
-              {
-                title: "",
-                company: "",
-                location: "",
-                dates: "",
-                description: "",
-              },
-            ],
-        education: initialData.education?.length
-          ? initialData.education
-          : [
-              {
-                degree: "",
-                institution: "",
-                location: "",
-                dates: "",
-                gpa: "",
-              },
-            ],
-        projects: initialData.projects?.length
-          ? initialData.projects
-          : [
-              {
-                name: "",
-                description: "",
-                technologies: [""],
-                link: "",
-              },
-            ],
-        certifications: initialData.certifications?.length
-          ? initialData.certifications
-          : [],
-        languages: initialData.languages?.length ? initialData.languages : [""],
-        socialLinks: initialData.socialLinks || {
-          linkedin: "",
-          github: "",
-          portfolio: "",
-        },
-        selectedTemplate: initialData.selectedTemplate || "",
-      });
-      setSelectedTemplate(initialData.selectedTemplate || "");
-    }
-  }, [initialData, form]);
+    const getAndSetInitialData = async () => {
+      if (!docId) return; // Don't fetch if no docId
+
+      try {
+        const initialData: PortfolioData = await getPortfolioData(docId);
+        console.log("Fetched data:", initialData);
+        console.log("Type of fetched data", typeof(initialData))
+
+        if (initialData && typeof initialData === "object") {
+          const formData = {
+            ...initialData,
+            skills: initialData.skills?.length ? initialData.skills : [""],
+            experience: initialData.experience?.length
+              ? initialData.experience
+              : [
+                  {
+                    title: "",
+                    company: "",
+                    location: "",
+                    dates: "",
+                    description: "",
+                  },
+                ],
+            education: initialData.education?.length
+              ? initialData.education
+              : [
+                  {
+                    degree: "",
+                    institution: "",
+                    location: "",
+                    dates: "",
+                    gpa: "",
+                  },
+                ],
+            projects: initialData.projects?.length
+              ? initialData.projects
+              : [
+                  {
+                    name: "",
+                    description: "",
+                    technologies: [""],
+                    link: "",
+                  },
+                ],
+            certifications: initialData.certifications?.length
+              ? initialData.certifications
+              : [],
+            languages: initialData.languages?.length
+              ? initialData.languages
+              : [""],
+            socialLinks: initialData.socialLinks || {
+              linkedin: "",
+              github: "",
+              portfolio: "",
+            },
+          };
+
+          console.log("Form data to reset with:", formData);
+          form.reset(formData);
+        }
+      } catch (error) {
+        console.error("Error fetching portfolio data:", error);
+      }
+    };
+
+    getAndSetInitialData();
+  }, [docId]);
 
   const handleSubmit = async (data: PortfolioFormData) => {
     setIsLoading(true);
-    try {
-      // Filter out empty strings from arrays
-      const cleanedData = {
-        ...data,
-        skills: data.skills.filter((skill) => skill.trim() !== ""),
-        languages: data.languages.filter((lang) => lang.trim() !== ""),
-        experience: data.experience.filter(
-          (exp) => exp.title.trim() !== "" || exp.company.trim() !== ""
-        ),
-        education: data.education.filter(
-          (edu) => edu.degree.trim() !== "" || edu.institution.trim() !== ""
-        ),
-        projects: data.projects
-          .filter(
-            (proj) => proj.name.trim() !== "" || proj.description.trim() !== ""
-          )
-          .map((proj) => ({
-            ...proj,
-            technologies: proj.technologies.filter(
-              (tech) => tech.trim() !== ""
-            ),
-          })),
-        certifications: data.certifications.filter(
-          (cert) => cert.name.trim() !== "" || cert.issuer.trim() !== ""
-        ),
-      };
+    // TODO: Implement the function
+  };
 
-      await onSubmit(cleanedData);
-    } catch (error) {
-      console.error("Error submitting portfolio:", error);
-    } finally {
-      setIsLoading(false);
-    }
+  const handlePreview = () => {
+    setShowPreview(true);
   };
 
   return (
@@ -195,13 +185,19 @@ const PortfolioForm: React.FC<PortfolioFormProps> = ({
       <div className="max-w-4xl mx-auto p-6">
         <div className="mb-8">
           <h1 className="text-3xl font-bold gradient-text mb-2">
-            {documentId ? "Edit Portfolio" : "Create Portfolio"}
+            {docId ? "Edit Portfolio" : "Create Portfolio"}
           </h1>
           <p className="text-muted">
-            {documentId
+            {docId
               ? "Update your portfolio information"
               : "Build your professional portfolio"}
           </p>
+          {/* Debug info - remove in production */}
+          {docId && (
+            <p className="text-sm text-muted-foreground mt-2">
+              Document ID: {docId}
+            </p>
+          )}
         </div>
 
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
@@ -241,12 +237,12 @@ const PortfolioForm: React.FC<PortfolioFormProps> = ({
               {isLoading ? (
                 <>
                   <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full mr-2"></div>
-                  {documentId ? "Updating..." : "Creating..."}
+                  {docId ? "Updating..." : "Creating..."}
                 </>
               ) : (
                 <>
                   <Save className="h-4 w-4 mr-2" />
-                  {documentId ? "Update Portfolio" : "Create Portfolio"}
+                  {docId ? "Update Portfolio" : "Create Portfolio"}
                 </>
               )}
             </Button>
@@ -256,12 +252,43 @@ const PortfolioForm: React.FC<PortfolioFormProps> = ({
               variant="outline"
               className="flex-1 sm:flex-none"
               disabled={isLoading}
+              onClick={handlePreview}
             >
               <Eye className="h-4 w-4 mr-2" />
               Preview
             </Button>
           </div>
         </form>
+
+        {/* Preview Modal */}
+        {showPreview && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-lg shadow-xl max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="sticky top-0 bg-white border-b border-gray-200 p-4 flex justify-between items-center">
+                <h2 className="text-xl font-semibold">Portfolio Preview</h2>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowPreview(false)}
+                  className="flex items-center gap-2"
+                >
+                  <X className="h-4 w-4" />
+                  Close
+                </Button>
+              </div>
+              <div className="p-4">
+                {(() => {
+                  const formData = form.getValues();
+                  const templateKey = (formData.selectedTemplate as TemplateKey) || 'modern';
+                  const TemplateComponent = PORTFOLIO_TEMPLATES[templateKey] || PORTFOLIO_TEMPLATES.modern;
+                  
+                  return <TemplateComponent data={formData} />;
+                })()}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
