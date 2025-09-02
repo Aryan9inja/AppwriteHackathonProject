@@ -17,6 +17,7 @@ import { functions } from "@/lib/appwrite.config";
 import { PARSE_RESUME_FUNC } from "@/constants/appwrite";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
+import { useNavigate } from "react-router-dom";
 
 interface Portfolio {
   id: number;
@@ -36,6 +37,10 @@ interface QuickActionsProps {
   setIsUploading: (uploading: boolean) => void;
 }
 
+interface JsonRes {
+  docId: string;
+}
+
 const FullscreenLoader = () => {
   return (
     <div className="fixed inset-0 bg-background/90 backdrop-blur-md z-50 flex items-center justify-center animate-backdrop-fade-in">
@@ -49,30 +54,40 @@ const FullscreenLoader = () => {
           {/* Rotating ring */}
           <div className="absolute -inset-2 border-2 border-transparent border-t-primary/30 border-r-secondary/30 rounded-full animate-spin"></div>
         </div>
-        
+
         {/* Dual loading spinner */}
         <div className="relative flex justify-center">
           <Loader2 className="w-12 h-12 text-primary animate-spin" />
-          <div className="absolute inset-0 w-12 h-12 border-4 border-transparent border-t-secondary rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}></div>
+          <div
+            className="absolute inset-0 w-12 h-12 border-4 border-transparent border-t-secondary rounded-full animate-spin"
+            style={{ animationDirection: "reverse", animationDuration: "1.5s" }}
+          ></div>
         </div>
-        
+
         {/* Text content with better spacing */}
         <div className="space-y-4">
           <h2 className="text-3xl font-bold gradient-text animate-scale-in">
             Processing Your Resume
           </h2>
-          <div className="space-y-3 animate-fade-in" style={{ animationDelay: '0.3s' }}>
+          <div
+            className="space-y-3 animate-fade-in"
+            style={{ animationDelay: "0.3s" }}
+          >
             <p className="text-foreground/90 text-lg font-medium">
               Uploading and parsing your resume...
             </p>
             <p className="text-muted text-sm leading-relaxed">
-              Your portfolio website will be initiated shortly. This process may take a few moments as we analyze your experience and skills.
+              Your portfolio website will be initiated shortly. This process may
+              take a few moments as we analyze your experience and skills.
             </p>
           </div>
         </div>
-        
+
         {/* Enhanced progress animation */}
-        <div className="w-80 mx-auto animate-fade-in" style={{ animationDelay: '0.6s' }}>
+        <div
+          className="w-80 mx-auto animate-fade-in"
+          style={{ animationDelay: "0.6s" }}
+        >
           <div className="h-3 bg-muted/20 rounded-full overflow-hidden border border-border/50">
             <div className="h-full bg-gradient-to-r from-primary via-secondary to-primary animate-shimmer rounded-full"></div>
           </div>
@@ -80,22 +95,41 @@ const FullscreenLoader = () => {
             Please don't close this window...
           </p>
         </div>
-        
+
         {/* Floating dots animation with staggered delays */}
-        <div className="flex justify-center space-x-3 animate-fade-in" style={{ animationDelay: '0.9s' }}>
-          <div className="w-3 h-3 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-          <div className="w-3 h-3 bg-secondary rounded-full animate-bounce" style={{ animationDelay: '200ms' }}></div>
-          <div className="w-3 h-3 bg-info rounded-full animate-bounce" style={{ animationDelay: '400ms' }}></div>
-          <div className="w-3 h-3 bg-primary rounded-full animate-bounce" style={{ animationDelay: '600ms' }}></div>
+        <div
+          className="flex justify-center space-x-3 animate-fade-in"
+          style={{ animationDelay: "0.9s" }}
+        >
+          <div
+            className="w-3 h-3 bg-primary rounded-full animate-bounce"
+            style={{ animationDelay: "0ms" }}
+          ></div>
+          <div
+            className="w-3 h-3 bg-secondary rounded-full animate-bounce"
+            style={{ animationDelay: "200ms" }}
+          ></div>
+          <div
+            className="w-3 h-3 bg-info rounded-full animate-bounce"
+            style={{ animationDelay: "400ms" }}
+          ></div>
+          <div
+            className="w-3 h-3 bg-primary rounded-full animate-bounce"
+            style={{ animationDelay: "600ms" }}
+          ></div>
         </div>
       </div>
     </div>
   );
 };
 
-const QuickActions: React.FC<QuickActionsProps> = ({ isUploading, setIsUploading }) => {
+const QuickActions: React.FC<QuickActionsProps> = ({
+  isUploading,
+  setIsUploading,
+}) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const user = useSelector((state: RootState) => state.auth.user);
+  const navigate=useNavigate()
 
   const handleUploadResume = () => {
     fileInputRef.current?.click();
@@ -128,21 +162,25 @@ const QuickActions: React.FC<QuickActionsProps> = ({ isUploading, setIsUploading
     try {
       console.log("Uploading resume...");
       const fileId = await uploadResume(file);
-      
+
       console.log("Resume uploaded, starting parsing...");
       // Trigger the resume parsing function
-      await functions.createExecution({
+      const res = await functions.createExecution({
         functionId: PARSE_RESUME_FUNC,
         body: JSON.stringify({
           userId: user.userId,
-          fileId: fileId
-        })
+          fileId: fileId,
+        }),
       });
+
+      const responseBody: string = res.responseBody;
+      const resAsJson: JsonRes = JSON.parse(responseBody);
 
       // Reset the input
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
+      navigate("/portfolio/create",{state:{docId:resAsJson.docId}})
     } catch (error) {
       console.error("Failed to upload resume:", error);
       alert("Failed to upload resume. Please try again.");
@@ -227,8 +265,8 @@ const QuickActions: React.FC<QuickActionsProps> = ({ isUploading, setIsUploading
                 <action.icon className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1 sm:mb-2 text-muted group-hover:text-foreground transition-colors" />
               )}
               <p className="text-xs sm:text-sm font-medium text-muted group-hover:text-foreground transition-colors leading-tight">
-                {action.label === "Upload Resume" && isUploading 
-                  ? "Processing..." 
+                {action.label === "Upload Resume" && isUploading
+                  ? "Processing..."
                   : action.label}
               </p>
             </div>
@@ -335,7 +373,10 @@ const PortfolioManagement: React.FC<PortfolioManagementProps> = ({
           isAnimated ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
         }`}
       >
-        <QuickActions isUploading={isUploading} setIsUploading={setIsUploading} />
+        <QuickActions
+          isUploading={isUploading}
+          setIsUploading={setIsUploading}
+        />
         <RecentPortfolios portfolios={portfolios} />
       </div>
     </>
