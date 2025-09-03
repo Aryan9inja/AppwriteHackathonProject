@@ -2,9 +2,11 @@ import { Routes, Route } from "react-router-dom";
 import { ReactElement } from "react";
 import LoginForm from "../components/forms/loginForm";
 import SignupPage from "../pages/signupPage";
-import { ProtectedRoute, PublicRoute } from "../components/auth";
+import { ProtectedRoute, PublicRoute, SharedRoute } from "../components/auth";
 import LandingPage from "@/pages/landingPage";
 import DashboardPage from "@/pages/dashboardPage";
+import PortfolioViewer from "@/components/PortfolioViewer";
+import { PortfolioForm } from "@/components/forms";
 
 interface RouteConfig {
   path: string;
@@ -23,19 +25,30 @@ const AppRoutes = () => {
       element: <SignupPage />,
     },
     {
-      path:"/",
-      element:<LandingPage/>
-    }
+      path: "/",
+      element: <LandingPage />,
+    },
   ];
 
   const protectedRoutes: RouteConfig[] = [
     {
       path: "/dashboard",
-      element: <DashboardPage/>,
+      element: <DashboardPage />,
     },
     {
       path: "/profile",
       element: <div>Profile - Protected Content</div>,
+    },
+    {
+      path: "/portfolio/create",
+      element: <PortfolioForm />,
+    },
+  ];
+
+  const sharedRoutes: RouteConfig[] = [
+    {
+      path: "/portfolio/:id",
+      element: <PortfolioViewer />,
     },
   ];
 
@@ -56,6 +69,15 @@ const AppRoutes = () => {
           key={route.path}
           path={route.path}
           element={<ProtectedRoute>{route.element}</ProtectedRoute>}
+        />
+      ))}
+
+      {/* Shared Routes - accessible with or without authentication */}
+      {sharedRoutes.map((route) => (
+        <Route
+          key={route.path}
+          path={route.path}
+          element={<SharedRoute>{route.element}</SharedRoute>}
         />
       ))}
     </Routes>
