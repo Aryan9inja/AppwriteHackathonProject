@@ -2,7 +2,7 @@
 import { ReactNode, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState, AppDispatch } from "@/store/store";
-import { setUser } from "@/store/slices/authSlice"; 
+import { setUser } from "@/store/slices/authSlice";
 
 interface PersistingAuthProps {
   children: ReactNode;
@@ -10,7 +10,9 @@ interface PersistingAuthProps {
 
 const PersistingAuth = ({ children }: PersistingAuthProps) => {
   const dispatch = useDispatch<AppDispatch>();
-  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.auth.isAuthenticated
+  );
   const [isChecking, setIsChecking] = useState(true);
 
   useEffect(() => {
@@ -18,15 +20,12 @@ const PersistingAuth = ({ children }: PersistingAuthProps) => {
       try {
         const storedUserData = localStorage.getItem("userData");
         if (storedUserData && !isAuthenticated) {
-          // Parse the JSON string to verify it's valid
           const userData = JSON.parse(storedUserData);
-          // Check if userData has the expected structure with nested user object
           if (userData && userData.user && userData.user.userId) {
-            dispatch(setUser(userData));
+            dispatch(setUser(userData.user));
           }
         }
       } catch (error) {
-        // Remove invalid JSON data
         localStorage.removeItem("userData");
         console.error("Invalid user data in localStorage:", error);
       }
@@ -36,7 +35,7 @@ const PersistingAuth = ({ children }: PersistingAuthProps) => {
   }, [dispatch, isAuthenticated]);
 
   if (isChecking) {
-    return <div>Loading...</div>; 
+    return <div className="h-screen flex justify-center items-center">Loading...</div>;
   }
 
   return <>{children}</>;
