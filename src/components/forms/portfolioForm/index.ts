@@ -1,6 +1,3 @@
-// Export main portfolio form
-export { default as PortfolioForm } from "./portfolioForm";
-
 // Export individual form sections
 export { default as PortfolioNameSection } from "./PortfolioNameSection";
 export { default as PersonalInfoSection } from "./PersonalInfoSection";
