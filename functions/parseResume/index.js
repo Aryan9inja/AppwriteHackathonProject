@@ -86,7 +86,7 @@ module.exports = async ({ req, res, log, error }) => {
     2. Extract ALL relevant skills mentioned in the resume
     3. List items in reverse chronological order (most recent first)
     4. Format dates consistently (e.g., "Jan 2020 - Mar 2022")
-    5. Return ONLY the JSON object, no other text
+    5. Return ONLY the JSON object, no other text like markdown tags
 
     Resume:
     ${resumeText}
