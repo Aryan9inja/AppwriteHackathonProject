@@ -1,6 +1,11 @@
 import { ID, Query } from "appwrite";
 import { account, tables } from "@/lib/appwrite.config";
-import type { LoginFormData, SignUpFormData, User, UserDoc } from "@/types/types";
+import type {
+  LoginFormData,
+  SignUpFormData,
+  User,
+  UserDoc,
+} from "@/types/types";
 import { DATABASE_ID, TABLE_USERS } from "@/constants/appwrite";
 
 export const registerUser = async (formData: SignUpFormData) => {
@@ -46,7 +51,6 @@ export const logout = async () => {
   }
 };
 
-
 export const getUserData = async () => {
   try {
     const accountUser = await account.get();
@@ -66,11 +70,11 @@ export const getUserData = async () => {
 
       return {
         user,
-        userDoc: null
+        userDoc: null,
       };
     }
 
-    const userDoc = docList.rows[0];
+    const userDoc: UserDoc = docList.rows[0];
 
     const user: User = {
       userId: userDoc.userId,
@@ -80,7 +84,7 @@ export const getUserData = async () => {
 
     return {
       user,
-      userDoc
+      userDoc:userDoc,
     };
   } catch (error) {
     console.error("Error fetching user:", error);
