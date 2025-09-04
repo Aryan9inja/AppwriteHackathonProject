@@ -88,4 +88,26 @@ export const fetchPortfolio = async (
   }
 };
 
+export const createPortfolioFromScratch = async (
+  data: PortfolioFormData,
+  templateId: string,
+  portfolioName: string,
+  userId: string
+) => {
+  try {
+    const doc = await tables.createRow({
+      databaseId: DATABASE_ID,
+      tableId: TABLE_PORTFOLIOS,
+      rowId: ID.unique(),
+      data: {
+        userId,
+        data: JSON.stringify(data),
+        templateId,
+        portfolioName,
+      },
+    });
+    return doc.$id
+  } catch (error) {}
+};
+
 export const getUserPortfolios = async (userId: string) => {};
