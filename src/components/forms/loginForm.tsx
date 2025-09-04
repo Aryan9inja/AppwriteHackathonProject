@@ -9,7 +9,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "@/store/store";
 import { loginUserThunk } from "@/store/thunks/authThunk";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "sonner";
 import { Eye, EyeOff, Mail, Lock, AlertCircle, LogIn } from "lucide-react";
 
@@ -19,6 +19,7 @@ const LoginForm = () => {
   const isLoading = loadingType === "login"; // ✅ rely only on redux
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -55,11 +56,16 @@ const LoginForm = () => {
         duration: 3000,
         action: {
           label: "Continue",
-          onClick: () => navigate("/dashboard"),
+          onClick: () => {
+            const redirectTo = location.state?.from?.pathname || "/dashboard";
+            navigate(redirectTo);
+          },
         },
       });
 
-      navigate("/dashboard");
+      // Redirect to intended route or dashboard
+      const redirectTo = location.state?.from?.pathname || "/dashboard";
+      navigate(redirectTo);
     } catch (error: unknown) {
       console.error(error);
       toast.dismiss(loadingToast);
