@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const portfolioSchema = z.object({
+  portfolioName: z.string().min(1, "Portfolio name is required").max(100, "Portfolio name must be less than 100 characters"),
   name: z.string().min(1, "Full name is required"),
   email: z.email("Invalid email address"),
   phone: z.string().optional(),
