@@ -2,6 +2,7 @@
 export { default as PortfolioForm } from "./portfolioForm";
 
 // Export individual form sections
+export { default as PortfolioNameSection } from "./PortfolioNameSection";
 export { default as PersonalInfoSection } from "./PersonalInfoSection";
 export { default as SkillsSection } from "./SkillsSection";
 export { default as ExperienceSection } from "./ExperienceSection";
