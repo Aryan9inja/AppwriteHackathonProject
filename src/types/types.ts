@@ -76,4 +76,6 @@ export interface PortfolioData {
 export interface PortfolioDoc extends Models.DefaultRow, PortfolioData {
   userId: string;
   data: string;
+  templateId:string;
+  portfolioName?: string;
 }
