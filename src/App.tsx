@@ -1,19 +1,14 @@
 import { Toaster } from "sonner";
 import AppRoutes from "@/routes/routes";
-import { useDispatch, useSelector } from "react-redux";
-import type { RootState, AppDispatch } from "@/store/store";
-import { useEffect } from "react";
-import { getUserDataThunk } from "@/store/thunks/authThunk";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store/store";
 import { FullScreenLoader } from "@/components/ui/loader";
+import PersistingAuth from "@/components/auth/PersistingAuth";
 
 function App() {
-  const dispatch = useDispatch<AppDispatch>();
   const loadingType = useSelector((state: RootState) => state.auth.loadingType);
-  useEffect(() => {
-    dispatch(getUserDataThunk());
-  }, [dispatch]);
 
-  if (loadingType==="user") {
+  if (loadingType === "user") {
     return (
       <FullScreenLoader 
         message="Verifying your authentication"
@@ -24,10 +19,10 @@ function App() {
   }
   
   return (
-    <>
+    <PersistingAuth>
       <Toaster position="top-right" richColors />
       <AppRoutes />
-    </>
+    </PersistingAuth>
   );
 }
 
