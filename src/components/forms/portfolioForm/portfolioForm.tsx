@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   portfolioSchema,
@@ -7,9 +7,13 @@ import {
 } from "@/schemas/portfolio.schema";
 import { Button } from "@/components/ui/button";
 import { Save, Eye, X } from "lucide-react";
-import { PORTFOLIO_TEMPLATES, TemplateKey } from "@/components/portfolioTemplates";
+import {
+  PORTFOLIO_TEMPLATES,
+  TemplateKey,
+} from "@/components/portfolioTemplates";
 
 // Import modular sections
+import PortfolioNameSection from "./PortfolioNameSection";
 import PersonalInfoSection from "./PersonalInfoSection";
 import SkillsSection from "./SkillsSection";
 import ExperienceSection from "./ExperienceSection";
@@ -20,23 +24,25 @@ import LanguagesSection from "./LanguagesSection";
 import SocialLinksSection from "./SocialLinksSection";
 import TemplateSection from "./TemplateSection";
 import { PortfolioData } from "@/types/types";
-import { getPortfolioData } from "@/services/portfolio.services";
-import { useLocation } from "react-router-dom";
+import {
+  getPortfolioData,
+  savePortfolioData,
+} from "@/services/portfolio.services";
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
-interface PortfolioFormProps {
-  onSubmit: (data: PortfolioFormData) => Promise<void>;
-}
-
-const PortfolioForm: React.FC<PortfolioFormProps> = ({ onSubmit }) => {
+const PortfolioForm: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<string>("");
   const [showPreview, setShowPreview] = useState(false);
   const location = useLocation();
   const { docId } = location.state;
+  const navigate = useNavigate();
 
   const form = useForm<PortfolioFormData>({
     resolver: zodResolver(portfolioSchema),
     defaultValues: {
+      portfolioName: "",
       name: "",
       email: "",
       phone: "",
@@ -108,8 +114,6 @@ const PortfolioForm: React.FC<PortfolioFormProps> = ({ onSubmit }) => {
 
       try {
         const initialData: PortfolioData = await getPortfolioData(docId);
-        console.log("Fetched data:", initialData);
-        console.log("Type of fetched data", typeof(initialData))
 
         if (initialData && typeof initialData === "object") {
           const formData = {
@@ -165,6 +169,11 @@ const PortfolioForm: React.FC<PortfolioFormProps> = ({ onSubmit }) => {
         }
       } catch (error) {
         console.error("Error fetching portfolio data:", error);
+        if (error instanceof SyntaxError && error.message.includes("JSON")) {
+          toast.error("AI working failed, try again or do manually");
+        } else {
+          toast.error("Could not get data. Try again");
+        }
       }
     };
 
@@ -173,7 +182,13 @@ const PortfolioForm: React.FC<PortfolioFormProps> = ({ onSubmit }) => {
 
   const handleSubmit = async (data: PortfolioFormData) => {
     setIsLoading(true);
-    // TODO: Implement the function
+    try {
+      await savePortfolioData(docId, data, selectedTemplate,data.portfolioName);
+      navigate(`/portfolio/${docId}`, { replace: true });
+    } catch (error) {
+      toast.error("Could not save data. Try again");
+    }
+    setIsLoading(false);
   };
 
   const handlePreview = () => {
@@ -185,50 +200,46 @@ const PortfolioForm: React.FC<PortfolioFormProps> = ({ onSubmit }) => {
       <div className="max-w-4xl mx-auto p-6">
         <div className="mb-8">
           <h1 className="text-3xl font-bold gradient-text mb-2">
-            {docId ? "Edit Portfolio" : "Create Portfolio"}
+            {docId ? "Edit Portfolio Data" : "Add Portfolio Data"}
           </h1>
           <p className="text-muted">
             {docId
               ? "Update your portfolio information"
               : "Build your professional portfolio"}
           </p>
-          {/* Debug info - remove in production */}
-          {docId && (
-            <p className="text-sm text-muted-foreground mt-2">
-              Document ID: {docId}
-            </p>
-          )}
         </div>
 
-        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
-          <PersonalInfoSection form={form} />
-          <SkillsSection form={form} />
-          <ExperienceSection
-            form={form}
-            experienceFieldArray={experienceFieldArray}
-          />
-          <EducationSection
-            form={form}
-            educationFieldArray={educationFieldArray}
-          />
-          <ProjectsSection
-            form={form}
-            projectsFieldArray={projectsFieldArray}
-          />
-          <CertificationsSection
-            form={form}
-            certificationsFieldArray={certificationsFieldArray}
-          />
-          <LanguagesSection form={form} />
-          <SocialLinksSection form={form} />
-          <TemplateSection
-            form={form}
-            selectedTemplate={selectedTemplate}
-            setSelectedTemplate={setSelectedTemplate}
-          />
+        <FormProvider {...form}>
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
+            <PortfolioNameSection form={form} />
+            <PersonalInfoSection form={form} />
+            <SkillsSection form={form} />
+            <ExperienceSection
+              form={form}
+              experienceFieldArray={experienceFieldArray}
+            />
+            <EducationSection
+              form={form}
+              educationFieldArray={educationFieldArray}
+            />
+            <ProjectsSection
+              form={form}
+              projectsFieldArray={projectsFieldArray}
+            />
+            <CertificationsSection
+              form={form}
+              certificationsFieldArray={certificationsFieldArray}
+            />
+            <LanguagesSection form={form} />
+            <SocialLinksSection form={form} />
+            <TemplateSection
+              form={form}
+              selectedTemplate={selectedTemplate}
+              setSelectedTemplate={setSelectedTemplate}
+            />
 
-          {/* Submit Section */}
-          <div className="flex flex-col sm:flex-row gap-4 pt-6">
+            {/* Submit Section */}
+            <div className="flex flex-col sm:flex-row gap-4 pt-6">
             <Button
               type="submit"
               disabled={isLoading}
@@ -237,12 +248,12 @@ const PortfolioForm: React.FC<PortfolioFormProps> = ({ onSubmit }) => {
               {isLoading ? (
                 <>
                   <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full mr-2"></div>
-                  {docId ? "Updating..." : "Creating..."}
+                  Creating...
                 </>
               ) : (
                 <>
                   <Save className="h-4 w-4 mr-2" />
-                  {docId ? "Update Portfolio" : "Create Portfolio"}
+                  Create Portfolio
                 </>
               )}
             </Button>
@@ -258,7 +269,8 @@ const PortfolioForm: React.FC<PortfolioFormProps> = ({ onSubmit }) => {
               Preview
             </Button>
           </div>
-        </form>
+          </form>
+        </FormProvider>
 
         {/* Preview Modal */}
         {showPreview && (
@@ -280,9 +292,12 @@ const PortfolioForm: React.FC<PortfolioFormProps> = ({ onSubmit }) => {
               <div className="p-4">
                 {(() => {
                   const formData = form.getValues();
-                  const templateKey = (formData.selectedTemplate as TemplateKey) || 'modern';
-                  const TemplateComponent = PORTFOLIO_TEMPLATES[templateKey] || PORTFOLIO_TEMPLATES.modern;
-                  
+                  const templateKey =
+                    (formData.selectedTemplate as TemplateKey) || "modern";
+                  const TemplateComponent =
+                    PORTFOLIO_TEMPLATES[templateKey] ||
+                    PORTFOLIO_TEMPLATES.modern;
+
                   return <TemplateComponent data={formData} />;
                 })()}
               </div>
