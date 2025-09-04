@@ -6,7 +6,7 @@ import { ProtectedRoute, PublicRoute, SharedRoute } from "../components/auth";
 import LandingPage from "@/pages/landingPage";
 import DashboardPage from "@/pages/dashboardPage";
 import PortfolioViewer from "@/components/PortfolioViewer";
-import { PortfolioForm } from "@/components/forms";
+import PortfolioForm from "@/pages/portfolioFormPage";
 
 interface RouteConfig {
   path: string;
