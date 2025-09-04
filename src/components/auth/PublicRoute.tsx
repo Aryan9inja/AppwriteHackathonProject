@@ -1,5 +1,5 @@
 import type { RootState } from "@/store/store";
-import { ReactNode } from "react";
+import { ReactNode, memo, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 
@@ -7,15 +7,17 @@ interface PublicRouteProps {
   children: ReactNode;
 }
 
-const PublicRoute = ({ children }: PublicRouteProps) => {
+const PublicRoute = memo(({ children }: PublicRouteProps) => {
   const isAuthenticated = useSelector(
     (state: RootState) => state.auth.isAuthenticated
   );
+  console.log("PublicRoute render");
   return !isAuthenticated ? (
     <>{children}</>
   ) : (
     <Navigate to="/dashboard" replace />
   );
-};
+});
 
+PublicRoute.displayName = "PublicRoute";
 export default PublicRoute;
