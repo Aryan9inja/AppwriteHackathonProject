@@ -8,14 +8,14 @@ interface WelcomeBannerProps {
 
 const WelcomeBanner: React.FC<WelcomeBannerProps> = ({ isAnimated }) => {
   return (
-    <div className={`mb-6 sm:mb-8 transform transition-all duration-700 ${isAnimated ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}>
-      <div className="bg-gradient-to-r from-primary/10 to-secondary/10 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-border/50">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className={`mb-4 sm:mb-6 lg:mb-8 transform transition-all duration-700 ${isAnimated ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}>
+      <div className="bg-gradient-to-r from-primary/10 to-secondary/10 rounded-lg sm:rounded-xl lg:rounded-2xl p-4 sm:p-5 lg:p-6 border border-border/50">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
           <div className="text-center sm:text-left">
-            <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-2">Welcome back! 👋</h2>
-            <p className="text-sm sm:text-base text-muted">Ready to create amazing portfolios? Let's build something great today.</p>
+            <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-foreground mb-1 sm:mb-2">Welcome back! 👋</h2>
+            <p className="text-xs sm:text-sm lg:text-base text-muted leading-relaxed">Ready to create amazing portfolios? Let's build something great today.</p>
           </div>
-          <Button className="bg-gradient-to-r from-primary to-secondary hover:from-primary-hover hover:to-secondary-hover text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto">
+          <Button className="bg-gradient-to-r from-primary to-secondary hover:from-primary-hover hover:to-secondary-hover text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto h-10 sm:h-10 lg:h-11 text-sm sm:text-sm lg:text-base flex-shrink-0">
             <Plus className="w-4 h-4 mr-2" />
             <span className="hidden xs:inline">Create New Portfolio</span>
             <span className="xs:hidden">Create Portfolio</span>
