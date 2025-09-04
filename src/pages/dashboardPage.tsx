@@ -1,18 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { User, FileText, Eye, Globe } from 'lucide-react';
 
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import WelcomeBanner from '@/components/dashboard/WelcomeBanner';
-import StatsGrid from '@/components/dashboard/StatsGrid';
-import PortfolioManagement from '@/components/dashboard/PortfolioManagement';
-import Sidebar from '@/components/dashboard/Sidebar';
-import DashboardTabs from '@/components/dashboard/DashboardTabs';
-import TabContent from '@/components/dashboard/TabContent';
-import FloatingActionButton from '@/components/dashboard/FloatingActionButton';
+import PortfolioList from '@/components/dashboard/PortfolioList';
+import PortfolioCreation from '@/components/dashboard/PortfolioCreation';
 
 const DashboardPage: React.FC = () => {
-  const [selectedTab, setSelectedTab] = useState('overview');
   const [isAnimated, setIsAnimated] = useState(false);
+  const [activeTab, setActiveTab] = useState<'overview' | 'portfolios'>('overview');
 
   useEffect(() => {
     // Trigger animations on mount
@@ -26,31 +21,78 @@ const DashboardPage: React.FC = () => {
     { id: 3, name: 'Data Scientist Portfolio', views: 2156, status: 'published', lastUpdated: '3 days ago' },
   ];
 
-  const recentActivity = [
-    { action: 'Portfolio updated', item: 'Software Engineer Portfolio', time: '2 hours ago', icon: FileText },
-    { action: 'New view received', item: 'Data Scientist Portfolio', time: '4 hours ago', icon: Eye },
-    { action: 'Portfolio published', item: 'UI/UX Designer Portfolio', time: '1 day ago', icon: Globe },
-    { action: 'Profile updated', item: 'Personal information', time: '2 days ago', icon: User },
-  ];
+  const renderMobileContent = () => {
+    switch (activeTab) {
+      case 'overview':
+        return (
+          <div className="space-y-4 sm:space-y-6">
+            <WelcomeBanner isAnimated={isAnimated} />
+            <PortfolioCreation />
+          </div>
+        );
+      case 'portfolios':
+        return <PortfolioList portfolios={portfolios} isAnimated={isAnimated} />;
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
       <DashboardHeader />
 
-      <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-8">
-        <WelcomeBanner isAnimated={isAnimated} />
-        <StatsGrid isAnimated={isAnimated} />
-
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 sm:gap-8">
-          <PortfolioManagement isAnimated={isAnimated} portfolios={portfolios} />
-          <Sidebar isAnimated={isAnimated} recentActivity={recentActivity} />
+      {/* Mobile Tab Navigation */}
+      <div className="sticky top-16 z-30 bg-background/95 backdrop-blur-sm border-b border-border md:hidden">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between py-2">
+            <div className="flex space-x-1 bg-muted/30 rounded-lg p-1">
+              {[
+                { id: 'overview', label: 'Overview' },
+                { id: 'portfolios', label: 'Portfolios' }
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id as typeof activeTab)}
+                  className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200 ${
+                    activeTab === tab.id
+                      ? 'bg-background text-foreground shadow-sm'
+                      : 'text-muted hover:text-foreground'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
-
-        <DashboardTabs isAnimated={isAnimated} selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
-        <TabContent isAnimated={isAnimated} selectedTab={selectedTab} portfolios={portfolios} />
       </div>
 
-      <FloatingActionButton />
+      {/* Desktop Layout */}
+      <div className="hidden md:block">
+        <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-8">
+          <WelcomeBanner isAnimated={isAnimated} />
+
+          {/* Main Layout: Portfolios on left, Creation on right */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 xl:gap-8">
+            {/* Portfolio List - Takes 2 columns on large screens */}
+            <div className="lg:col-span-2">
+              <PortfolioList portfolios={portfolios} isAnimated={isAnimated} />
+            </div>
+            
+            {/* Portfolio Creation - Takes 1 column on large screens */}
+            <div className="lg:col-span-1">
+              <PortfolioCreation />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Layout */}
+      <div className="block md:hidden">
+        <div className="container mx-auto px-4 py-4 pb-20">
+          {renderMobileContent()}
+        </div>
+      </div>
     </div>
   );
 };
