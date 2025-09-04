@@ -37,7 +37,10 @@ const authSlice = createSlice({
       state.user = action.payload;
       state.isAuthenticated = !!action.payload;
     },
-    setAccountUser: (state, action: PayloadAction<Models.User<Models.Preferences> | null>) => {
+    setAccountUser: (
+      state,
+      action: PayloadAction<Models.User<Models.Preferences> | null>
+    ) => {
       state.accountUser = action.payload;
     },
     resetAuth: (state) => {
@@ -116,7 +119,11 @@ const authSlice = createSlice({
       })
       .addCase(getUserDataThunk.fulfilled, (state, action) => {
         state.loadingType = null;
-        if (action.payload) {
+        if (
+          action.payload &&
+          "userDoc" in action.payload &&
+          "user" in action.payload
+        ) {
           state.userData = action.payload.userDoc;
           state.user = action.payload.user;
           state.isAuthenticated = true;
@@ -137,5 +144,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { clearError, setUser, setAccountUser, resetAuth } = authSlice.actions;
+export const { clearError, setUser, setAccountUser, resetAuth } =
+  authSlice.actions;
 export default authSlice.reducer;
