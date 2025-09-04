@@ -27,23 +27,6 @@ const DashboardHeader: React.FC = () => {
           </div>
 
           <div className="flex items-center space-x-2 sm:space-x-4">
-            <div className="relative hidden lg:block">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted w-4 h-4" />
-              <input 
-                type="text" 
-                placeholder="Search portfolios..."
-                className="pl-10 pr-4 py-2 bg-muted/20 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200 w-48 xl:w-64"
-              />
-            </div>
-
-            <Button variant="ghost" size="sm" className="lg:hidden p-2">
-              <Search className="w-4 h-4" />
-            </Button>
-
-            <div className="relative">
-              <Bell className="w-4 h-4 sm:w-5 sm:h-5 text-muted hover:text-foreground cursor-pointer transition-colors" />
-              <div className="absolute -top-1 -right-1 w-2 h-2 sm:w-3 sm:h-3 bg-error rounded-full animate-pulse"></div>
-            </div>
 
             <div className="flex items-center space-x-2 sm:space-x-3">
               <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center">
