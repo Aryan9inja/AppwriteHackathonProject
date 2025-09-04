@@ -13,7 +13,29 @@ module.exports = async ({ req, res, log, error }) => {
     const storage = new sdk.Storage(client);
     const tables = new sdk.TablesDB(client);
 
-    const { userId, fileId } = JSON.parse(req.body);
+    // Log the received data for debugging
+    log("Received request body:", req.body);
+    log("Request body type:", typeof req.body);
+    
+    // Handle different possible formats of req.body
+    let requestData;
+    try {
+      if (typeof req.body === 'string') {
+        requestData = JSON.parse(req.body);
+      } else if (typeof req.body === 'object') {
+        requestData = req.body;
+      } else {
+        throw new Error("Invalid request body format");
+      }
+    } catch (parseError) {
+      log("Error parsing request body:", parseError.message);
+      return res.json({ error: "Invalid JSON in request body" }, 400);
+    }
+
+    const { userId, fileId } = requestData;
+    log("Parsed userId:", userId);
+    log("Parsed fileId:", fileId);
+    
     if (!userId || !fileId) {
       return res.json({ error: "userId and fileId are required" }, 400);
     }
@@ -128,6 +150,8 @@ module.exports = async ({ req, res, log, error }) => {
 
     return res.json({ success: true, docId: newDoc.$id });
   } catch (err) {
+    log("Function error:", err.message);
+    log("Error stack:", err.stack);
     error(err.message);
     return res.json({ error: err.message }, 500);
   }
