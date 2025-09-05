@@ -53,15 +53,7 @@ const PortfolioForm: React.FC = () => {
       location: "",
       summary: "",
       skills: [""],
-      experience: [
-        {
-          title: "",
-          company: "",
-          location: "",
-          dates: "",
-          description: "",
-        },
-      ],
+      experience: [],
       education: [
         {
           degree: "",
@@ -127,15 +119,7 @@ const PortfolioForm: React.FC = () => {
             skills: initialData.skills?.length ? initialData.skills : [""],
             experience: initialData.experience?.length
               ? initialData.experience
-              : [
-                  {
-                    title: "",
-                    company: "",
-                    location: "",
-                    dates: "",
-                    description: "",
-                  },
-                ],
+              : [],
             education: initialData.education?.length
               ? initialData.education
               : [
