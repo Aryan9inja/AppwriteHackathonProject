@@ -14,7 +14,7 @@ export const portfolioSchema = z.object({
     location: z.string().optional(),
     dates: z.string().min(1, "Date range is required"),
     description: z.string().min(1, "Description is required")
-  })),
+  })).optional(),
   education: z.array(z.object({
     degree: z.string().min(1, "Degree is required"),
     institution: z.string().min(1, "Institution is required"),
