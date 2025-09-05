@@ -6,7 +6,7 @@ import {
 import { storage, tables } from "@/lib/appwrite.config";
 import { PortfolioFormData } from "@/schemas/portfolio.schema";
 import { PortfolioData, PortfolioDoc } from "@/types/types";
-import { ID } from "appwrite";
+import { ID, Query } from "appwrite";
 
 export const uploadResume = async (file: File) => {
   try {
@@ -57,6 +57,7 @@ export const savePortfolioData = async (
         data: JSON.stringify(data),
         templateId,
         portfolioName,
+        urlString: `/portfolio/${docId}`,
       },
     });
   } catch (error) {
@@ -95,19 +96,49 @@ export const createPortfolioFromScratch = async (
   userId: string
 ) => {
   try {
+    const newId = ID.unique();
     const doc = await tables.createRow({
       databaseId: DATABASE_ID,
       tableId: TABLE_PORTFOLIOS,
-      rowId: ID.unique(),
+      rowId: newId,
       data: {
         userId,
         data: JSON.stringify(data),
         templateId,
         portfolioName,
+        urlString: `/portfolio/${newId}`,
       },
     });
-    return doc.$id
-  } catch (error) {}
+    return doc.$id;
+  } catch (error) {
+    console.error("Failed to create doc: ", error);
+    throw error;
+  }
 };
 
-export const getUserPortfolios = async (userId: string) => {};
+export const getUserPortfolios = async (userId: string) => {
+  try {
+    const portfolios = await tables.listRows({
+      databaseId: DATABASE_ID,
+      tableId: TABLE_PORTFOLIOS,
+      queries: [Query.equal("userId", userId)],
+    });
+    return portfolios;
+  } catch (error) {
+    console.error("Failed to get user portfolios: ", error);
+    throw error;
+  }
+};
+
+export const deletePortfolio=async(portfolioId:string)=>{
+  try {
+    await tables.deleteRow({
+      databaseId:DATABASE_ID,
+      tableId:TABLE_PORTFOLIOS,
+      rowId:portfolioId
+    })
+  } catch (error) {
+    console.error("Failed to delete portfolio: ",error)
+    throw error
+  }
+}
