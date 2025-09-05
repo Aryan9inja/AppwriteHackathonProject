@@ -83,7 +83,7 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ data }) => {
           <div className="mb-16">
             <h2 className="text-2xl font-light text-gray-900 mb-12 text-center">Experience</h2>
             <div className="space-y-12">
-              {data.experience.map((exp, index) => (
+              {data.experience?.map((exp, index) => (
                 <div key={index} className="text-center">
                   <h3 className="text-xl font-medium text-gray-900 mb-2">{exp.title}</h3>
                   <p className="text-lg text-gray-600 mb-2">{exp.company}</p>
@@ -92,7 +92,7 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ data }) => {
                     <span>{exp.dates}</span>
                   </div>
                   <p className="text-gray-700 leading-relaxed max-w-2xl mx-auto">{exp.description}</p>
-                  {index < data.experience.length - 1 && (
+                  {index < (data.experience?.length ?? 0) - 1 && (
                     <div className="w-px h-12 bg-gray-300 mx-auto mt-8"></div>
                   )}
                 </div>
@@ -106,7 +106,7 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ data }) => {
           <div className="mb-16">
             <h2 className="text-2xl font-light text-gray-900 mb-12 text-center">Education</h2>
             <div className="space-y-8">
-              {data.education.map((edu, index) => (
+              {data.education?.map((edu, index) => (
                 <div key={index} className="text-center">
                   <h3 className="text-xl font-medium text-gray-900">{edu.degree}</h3>
                   <p className="text-lg text-gray-600 mb-2">{edu.institution}</p>
@@ -126,7 +126,7 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ data }) => {
           <div className="mb-16">
             <h2 className="text-2xl font-light text-gray-900 mb-12 text-center">Projects</h2>
             <div className="space-y-12">
-              {data.projects.map((project, index) => (
+              {data.projects?.map((project, index) => (
                 <div key={index} className="text-center border-b border-gray-200 pb-12 last:border-b-0 last:pb-0">
                   <div className="flex items-center justify-center gap-4 mb-4">
                     <h3 className="text-xl font-medium text-gray-900">{project.name}</h3>
@@ -158,7 +158,7 @@ const MinimalTemplate: React.FC<MinimalTemplateProps> = ({ data }) => {
           <div className="mb-16">
             <h2 className="text-2xl font-light text-gray-900 mb-12 text-center">Certifications</h2>
             <div className="grid md:grid-cols-2 gap-8">
-              {data.certifications.map((cert, index) => (
+              {data.certifications?.map((cert, index) => (
                 <div key={index} className="text-center p-6 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
                   <h3 className="font-medium text-gray-900 mb-1">{cert.name}</h3>
                   <p className="text-gray-600 mb-1">{cert.issuer}</p>
