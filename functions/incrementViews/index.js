@@ -62,12 +62,12 @@ module.exports = async ({ req, res, log, error }) => {
     });
 
     const portfolio = await tables.getRow({
-      databaseId: DATABASE_ID,
+      databaseId: process.env.DATABASE_ID,
       tableId: process.env.PORTFOLIO_TABLE_ID,
       rowId: portfolioId,
     });
     await tables.updateRow({
-      databaseId: DATABASE_ID,
+      databaseId: process.env.DATABASE_ID,
       tableId: process.env.PORTFOLIO_TABLE_ID,
       rowId: portfolioId,
       data: {
