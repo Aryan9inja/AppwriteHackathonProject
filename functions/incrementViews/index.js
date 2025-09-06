@@ -1,3 +1,4 @@
+const { ID } = require("node-appwrite");
 const sdk = require("node-appwrite");
 
 module.exports = async ({ req, res, log, error }) => {
@@ -62,6 +63,7 @@ module.exports = async ({ req, res, log, error }) => {
         ip,
         timestamp: new Date().toISOString(),
       },
+      rowId:ID.unique()
     });
 
     const portfolio = await tables.getRow({
@@ -79,7 +81,8 @@ module.exports = async ({ req, res, log, error }) => {
     });
 
     return res.json({ message: "View counted", viewsUpdated: true });
-  } catch (error) {
-    return res.json({ error: error.message }, 500);
+  } catch (err) {
+    log("Error in function:", err.message);
+    return res.json({ error: err.message }, 500);
   }
 };
