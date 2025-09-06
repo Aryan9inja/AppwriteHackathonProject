@@ -1,6 +1,10 @@
 const { ID, Query, Client, TablesDB } = require("node-appwrite");
 
 module.exports = async ({ req, res, log, error }) => {
+  log("DB:", process.env.DATABASE_ID);
+  log("Views Table:", process.env.PORTFOLIO_VIEWS_TABLE_ID);
+  log("Portfolio Table:", process.env.PORTFOLIO_TABLE_ID);
+
   try {
     // Init Appwrite Client
     const client = new Client()
