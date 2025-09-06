@@ -77,6 +77,6 @@ module.exports = async ({ req, res, log, error }) => {
 
     return res.json({ message: "View counted", viewsUpdated: true });
   } catch (error) {
-    return res.json({ error: err.message }, 500);
+    return res.json({ error: error.message }, 500);
   }
 };
