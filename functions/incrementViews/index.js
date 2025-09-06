@@ -57,7 +57,7 @@ module.exports = async ({ req, res, log, error }) => {
       data: {
         portfolioId,
         ip,
-        timestamp: new Date().toISOString,
+        timestamp: new Date().toISOString(),
       },
     });
 
