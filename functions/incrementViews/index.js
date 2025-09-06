@@ -9,8 +9,25 @@ module.exports = async ({ req, res, log, error }) => {
 
     const tables = new sdk.TablesDB(client);
 
-    const portfolioId = req.query.portfolioId || req.body.portfolioId;
-    const ip = req.headers["x-forwarded-for"] || req.ip;
+    let requestData;
+    try {
+      if (typeof req.body === "string") {
+        requestData = JSON.parse(req.body);
+      } else if (typeof req.body === "object") {
+        requestData = req.body;
+      } else {
+        throw new Error("Invalid request body format");
+      }
+    } catch (parseError) {
+      log("Error parsing request body:", parseError.message);
+      return res.json({ error: "Invalid JSON in request body" }, 400);
+    }
+
+    const portfolioId = req.query.portfolioId || requestData.portfolioId;
+    const ip =
+      req.headers["x-forwarded-for"] ||
+      req.ip ||
+      req.headers["x-appwrite-client-ip"];
 
     if (!portfolioId) {
       return res.json({ error: "Missing portfolioId" }, 400);
