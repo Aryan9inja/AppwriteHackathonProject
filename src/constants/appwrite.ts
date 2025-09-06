@@ -7,6 +7,8 @@ export const TABLE_TEMPLATES: string = import.meta.env
   .VITE_APPWRITE_TABLE_TEMPLATES!;
 
 export const RESUME_BUCKET: string = import.meta.env
-  .VITE_APPWRITE_RESUME_BUCKET;
+  .VITE_APPWRITE_RESUME_BUCKET!;
 export const PARSE_RESUME_FUNC = import.meta.env
-  .VITE_APPWRITE_PARSE_RESUME_FUNC;
+  .VITE_APPWRITE_PARSE_RESUME_FUNC!;
+export const INCREMENT_VIEWS_FUNC = import.meta.env
+  .VITE_APPWRITE_INCREMENT_VIEWS_FUNC!;
