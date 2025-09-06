@@ -23,13 +23,14 @@ module.exports = async ({ req, res, log, error }) => {
       log("Error parsing request body:", parseError.message);
       return res.json({ error: "Invalid JSON in request body" }, 400);
     }
+    log("Request Data: ",requestData)
 
-    const portfolioId = req.query.portfolioId || requestData.portfolioId;
+    const portfolioId = req.query?.portfolioId || requestData?.portfolioId;
     log("PortfolioID", portfolioId);
     const ip =
-      req.headers["x-forwarded-for"] ||
-      req.ip ||
-      req.headers["x-appwrite-client-ip"];
+      req?.headers["x-forwarded-for"] ||
+      req?.ip ||
+      req?.headers["x-appwrite-client-ip"];
 
     log("Client IP", ip);
 
@@ -76,7 +77,7 @@ module.exports = async ({ req, res, log, error }) => {
       tableId: process.env.PORTFOLIO_TABLE_ID,
       rowId: portfolioId,
       data: {
-        views: portfolio.views + 1,
+        views: portfolio?.views + 1,
       },
     });
 
