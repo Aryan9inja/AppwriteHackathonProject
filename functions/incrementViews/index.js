@@ -63,7 +63,7 @@ module.exports = async ({ req, res, log, error }) => {
         ip,
         timestamp: new Date().toISOString(),
       },
-      rowId:ID.unique()
+      rowId: ID.unique(),
     });
 
     const portfolio = await tables.getRow({
@@ -83,6 +83,7 @@ module.exports = async ({ req, res, log, error }) => {
     return res.json({ message: "View counted", viewsUpdated: true });
   } catch (err) {
     log("Error in function:", err.message);
+    log("Error details:", JSON.stringify(err, null, 2));
     return res.json({ error: err.message }, 500);
   }
 };
