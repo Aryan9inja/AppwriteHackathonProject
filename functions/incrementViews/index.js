@@ -24,10 +24,13 @@ module.exports = async ({ req, res, log, error }) => {
     }
 
     const portfolioId = req.query.portfolioId || requestData.portfolioId;
+    log("PortfolioID", portfolioId);
     const ip =
       req.headers["x-forwarded-for"] ||
       req.ip ||
       req.headers["x-appwrite-client-ip"];
+
+    log("Client IP", ip);
 
     if (!portfolioId) {
       return res.json({ error: "Missing portfolioId" }, 400);
