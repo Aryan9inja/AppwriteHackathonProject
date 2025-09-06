@@ -7,6 +7,8 @@ import {
 } from "@/components/portfolioTemplates";
 import { Loader } from "@/components/ui/loader";
 import { fetchPortfolio } from "@/services/portfolio.services";
+import { functions } from "@/lib/appwrite.config";
+import { INCREMENT_VIEWS_FUNC } from "@/constants/appwrite";
 
 const PortfolioViewer: React.FC = memo(() => {
   const { id } = useParams<{ id: string }>();
@@ -16,24 +18,60 @@ const PortfolioViewer: React.FC = memo(() => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    let isMounted = true; // Track if component is still mounted
+
     const setData = async () => {
       setLoading(true);
       if (!id) {
-        setError("Provide an ID in params");
-        setLoading(false);
+        if (isMounted) {
+          setError("Provide an ID in params");
+          setLoading(false);
+        }
         return;
       }
       try {
         const data = await fetchPortfolio(id);
-        setPortfolio(data);
-        setError(null); // Clear any previous errors
+        if (isMounted) {
+          setPortfolio(data);
+          setError(null); // Clear any previous errors
+        }
       } catch (err) {
-        setError("Error fetching portfolio");
+        if (isMounted) {
+          setError("Error fetching portfolio");
+        }
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
-    setData();
+
+    const incrementView = async () => {
+      if (!id) return;
+      try {
+        await functions.createExecution({
+          functionId: INCREMENT_VIEWS_FUNC,
+          body: JSON.stringify({ portfolioId: id }),
+        });
+      } catch (err) {
+        console.error("Error incrementing view", err);
+      }
+    };
+
+    const initializePortfolio = async () => {
+      await setData();
+      // Only increment view after successfully fetching portfolio data
+      if (isMounted) {
+        incrementView();
+      }
+    };
+
+    initializePortfolio();
+
+    // Cleanup function to prevent setState on unmounted component
+    return () => {
+      isMounted = false;
+    };
   }, [id]);
 
   if (loading) {
