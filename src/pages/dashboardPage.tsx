@@ -25,7 +25,7 @@ const DashboardPage: React.FC = () => {
     const getPortfolios = async () => {
       try {
         const fetchedPortfolios = await getUserPortfolios(user?.userId!);
-        setPortfolios(fetchedPortfolios.rows);
+        setPortfolios(fetchedPortfolios.rows.reverse());
       } catch (error) {
         toast.error("Failed to fetch portfolios, try to refresh");
       } finally {
