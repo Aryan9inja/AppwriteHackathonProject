@@ -12,3 +12,5 @@ export const PARSE_RESUME_FUNC = import.meta.env
   .VITE_APPWRITE_PARSE_RESUME_FUNC!;
 export const INCREMENT_VIEWS_FUNC = import.meta.env
   .VITE_APPWRITE_INCREMENT_VIEWS_FUNC!;
+export const DELETE_PORTFOLIO_FUNC = import.meta.env
+  .VITE_APPWRITE_DELETE_PORTFOLIO_FUNC!;
