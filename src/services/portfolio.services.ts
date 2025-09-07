@@ -1,9 +1,10 @@
 import {
   DATABASE_ID,
+  DELETE_PORTFOLIO_FUNC,
   RESUME_BUCKET,
   TABLE_PORTFOLIOS,
 } from "@/constants/appwrite";
-import { storage, tables } from "@/lib/appwrite.config";
+import { functions, storage, tables } from "@/lib/appwrite.config";
 import { PortfolioFormData } from "@/schemas/portfolio.schema";
 import { PortfolioData, PortfolioDoc } from "@/types/types";
 import { ID, Query } from "appwrite";
@@ -130,15 +131,14 @@ export const getUserPortfolios = async (userId: string) => {
   }
 };
 
-export const deletePortfolio=async(portfolioId:string)=>{
+export const deletePortfolio = async (portfolioId: string) => {
   try {
-    await tables.deleteRow({
-      databaseId:DATABASE_ID,
-      tableId:TABLE_PORTFOLIOS,
-      rowId:portfolioId
-    })
+    await functions.createExecution({
+      functionId: DELETE_PORTFOLIO_FUNC,
+      body: JSON.stringify({ portfolioId }),
+    });
   } catch (error) {
-    console.error("Failed to delete portfolio: ",error)
-    throw error
+    console.error("Failed to delete portfolio: ", error);
+    throw error;
   }
-}
+};
