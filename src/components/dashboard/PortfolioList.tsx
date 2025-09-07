@@ -1,5 +1,5 @@
-import React from "react";
-import { Eye, Globe, Clock, ExternalLink, Edit, Trash2 } from "lucide-react";
+import React, { useState } from "react";
+import { Eye, Globe, Clock, ExternalLink, Edit, Trash2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { deletePortfolio } from "@/services/portfolio.services";
@@ -26,20 +26,29 @@ const PortfolioCard: React.FC<{ portfolio: Portfolio; index: number; onPortfolio
   onPortfolioDeleted,
 }) => {
   const navigate = useNavigate();
+  const [isDeleting, setIsDeleting] = useState(false);
+  
   const handleNavigation = () => {
     navigate(portfolio.urlString);
   };
 
-  const handleDelete=async()=>{
+  const handleDelete = async () => {
+    if (isDeleting) return; // Prevent multiple clicks
+    
+    setIsDeleting(true);
+    const deleteToastId = toast.loading("Deleting portfolio...");
+    
     try {
-      await deletePortfolio(portfolio.$id)
-      toast.success("Portfolio deleted successfully")
+      await deletePortfolio(portfolio.$id);
+      toast.success("Portfolio deleted successfully", { id: deleteToastId });
       // Call the callback to update the parent state
       if (onPortfolioDeleted) {
         onPortfolioDeleted(portfolio.$id);
       }
     } catch (error) {
-      toast.error("Failed to delete portfolio")
+      toast.error("Failed to delete portfolio", { id: deleteToastId });
+    } finally {
+      setIsDeleting(false);
     }
   }
 
@@ -49,7 +58,9 @@ const PortfolioCard: React.FC<{ portfolio: Portfolio; index: number; onPortfolio
 
   return (
     <div
-      className={`bg-card border border-border rounded-lg sm:rounded-xl p-3 sm:p-4 hover:shadow-lg transition-all duration-300 animate-slide-in group touch-manipulation`}
+      className={`bg-card border border-border rounded-lg sm:rounded-xl p-3 sm:p-4 hover:shadow-lg transition-all duration-300 animate-slide-in group touch-manipulation ${
+        isDeleting ? "opacity-50 pointer-events-none" : ""
+      }`}
       style={{ animationDelay: `${index * 100}ms` }}
     >
       <div className="flex items-start justify-between mb-3">
@@ -62,9 +73,14 @@ const PortfolioCard: React.FC<{ portfolio: Portfolio; index: number; onPortfolio
               onClick={handleDelete}
               size="sm"
               variant="ghost"
-              className="h-6 w-6 p-0 text-muted-foreground hover:text-destructive hover:bg-destructive/10 ml-2 flex-shrink-0"
+              disabled={isDeleting}
+              className="h-6 w-6 p-0 text-muted-foreground hover:text-destructive hover:bg-destructive/10 ml-2 flex-shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <Trash2 className="w-3 h-3" />
+              {isDeleting ? (
+                <Loader2 className="w-3 h-3 animate-spin" />
+              ) : (
+                <Trash2 className="w-3 h-3" />
+              )}
             </Button>
           </div>
           <div className="flex items-center flex-wrap gap-2 sm:gap-3 mt-1">
@@ -113,7 +129,8 @@ const PortfolioCard: React.FC<{ portfolio: Portfolio; index: number; onPortfolio
             onClick={handleNavigation}
             size="sm"
             variant="outline"
-            className="h-8 px-3 text-xs flex-shrink-0"
+            disabled={isDeleting}
+            className="h-8 px-3 text-xs flex-shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <ExternalLink className="w-3 h-3 mr-1" />
             <span className="hidden xs:inline">View</span>
@@ -122,7 +139,8 @@ const PortfolioCard: React.FC<{ portfolio: Portfolio; index: number; onPortfolio
           <Button
             onClick={handleEdit}
             size="sm"
-            className="h-8 px-3 text-xs bg-gradient-to-r from-primary to-secondary hover:from-primary-hover hover:to-secondary-hover text-white flex-shrink-0"
+            disabled={isDeleting}
+            className="h-8 px-3 text-xs bg-gradient-to-r from-primary to-secondary hover:from-primary-hover hover:to-secondary-hover text-white flex-shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Edit className="w-3 h-3 mr-1" />
             <span className="hidden xs:inline">Edit</span>
