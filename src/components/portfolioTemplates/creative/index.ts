@@ -1,0 +1,9 @@
+// Export the main Creative Portfolio Website component
+export { default as CreativePortfolioWebsite } from './CreativePortfolioWebsite';
+
+// Export individual page components for flexibility
+export { default as HomePage } from './HomePage';
+export { default as AboutPage } from './AboutPage';
+export { default as ExperiencePage } from './ExperiencePage';
+export { default as EducationPage } from './EducationPage';
+export { default as ProjectsPage } from './ProjectsPage';
