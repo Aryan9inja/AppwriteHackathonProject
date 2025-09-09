@@ -27,22 +27,22 @@ const SharedLayout: React.FC<SharedLayoutProps> = ({ children, data }) => {
       {/* Navigation */}
       <nav className="bg-white shadow-lg border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+          <div className="flex justify-between items-center h-14 md:h-16">
             {/* Logo */}
             <Link to="/" className="flex items-center">
-              <h1 className="text-xl font-serif font-bold text-gray-900 hover:text-blue-600 transition-colors">
+              <h1 className="text-lg md:text-xl font-serif font-bold text-gray-900 hover:text-blue-600 transition-colors truncate">
                 {data.name}
               </h1>
             </Link>
 
             {/* Desktop Navigation */}
             <div className="hidden md:block">
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2 lg:space-x-4">
                 {navigationItems.map((item) => (
                   <Link
                     key={item.name}
                     to={item.path}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                    className={`flex items-center gap-1 lg:gap-2 px-3 lg:px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm lg:text-base ${
                       isActive(item.path)
                         ? 'bg-blue-600 text-white shadow-md'
                         : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
