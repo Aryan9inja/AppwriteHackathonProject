@@ -29,22 +29,22 @@ const AboutPage: React.FC<AboutPageProps> = ({ data }) => {
   return (
     <div className="max-w-7xl mx-auto p-4 md:p-8">
       {/* Personal Information Section */}
-      <div className="bg-white shadow-lg border border-gray-200 rounded-lg p-8 mb-8 hover:shadow-xl transition-shadow duration-300">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-4 tracking-tight">
+      <div className="bg-white shadow-lg border border-gray-200 rounded-lg p-6 md:p-8 mb-6 md:mb-8 hover:shadow-xl transition-shadow duration-300">
+        <div className="text-center mb-6 md:mb-8">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-gray-900 mb-4 tracking-tight">
             About {data.name.split(' ')[0]}
           </h1>
-          <div className="flex flex-wrap justify-center gap-6 md:gap-12 text-gray-600 mb-6">
+          <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-4 sm:gap-6 md:gap-8 lg:gap-12 text-gray-600 mb-6">
             {data.email && (
-              <div className="flex items-center gap-3 hover:text-gray-800 transition-colors">
-                <Mail className="w-6 h-6 text-blue-600" />
-                <span className="font-medium text-lg">{data.email}</span>
+              <div className="flex items-center justify-center gap-2 md:gap-3 hover:text-gray-800 transition-colors">
+                <Mail className="w-5 h-5 md:w-6 md:h-6 text-blue-600" />
+                <span className="font-medium text-sm sm:text-base md:text-lg break-all">{data.email}</span>
               </div>
             )}
             {data.phone && (
-              <div className="flex items-center gap-3 hover:text-gray-800 transition-colors">
-                <Phone className="w-6 h-6 text-green-600" />
-                <span className="font-medium text-lg">{data.phone}</span>
+              <div className="flex items-center justify-center gap-2 md:gap-3 hover:text-gray-800 transition-colors">
+                <Phone className="w-5 h-5 md:w-6 md:h-6 text-green-600" />
+                <span className="font-medium text-sm sm:text-base md:text-lg">{data.phone}</span>
               </div>
             )}
             {data.location && (

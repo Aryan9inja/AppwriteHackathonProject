@@ -109,21 +109,21 @@ const ClassicPortfolioWebsite: React.FC<ClassicPortfolioWebsiteProps> = ({ data 
       <main>{renderCurrentPage()}</main>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 mt-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <footer className="bg-white border-t border-gray-200 mt-8 md:mt-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
           <div className="text-center">
-            <h3 className="text-lg font-serif font-bold text-gray-900 mb-4">{data.name}</h3>
-            <p className="text-gray-600 mb-4">
+            <h3 className="text-base md:text-lg font-serif font-bold text-gray-900 mb-3 md:mb-4">{data.name}</h3>
+            <p className="text-sm md:text-base text-gray-600 mb-3 md:mb-4">
               © {new Date().getFullYear()} {data.name}. All rights reserved.
             </p>
             
             {/* Footer Navigation */}
-            <div className="flex flex-wrap justify-center gap-6 text-sm">
+            <div className="flex flex-wrap justify-center gap-3 md:gap-6 text-xs md:text-sm">
               {navItems.filter(item => item.page !== 'home').map((item) => (
                 <button
                   key={item.name}
                   onClick={() => setCurrentPage(item.page)}
-                  className="text-gray-600 hover:text-gray-900 transition-colors"
+                  className="text-gray-600 hover:text-gray-900 transition-colors px-2 py-1"
                 >
                   {item.name}
                 </button>
@@ -131,8 +131,8 @@ const ClassicPortfolioWebsite: React.FC<ClassicPortfolioWebsiteProps> = ({ data 
             </div>
 
             {/* Contact Info in Footer */}
-            <div className="flex flex-wrap justify-center gap-6 mt-4 text-sm text-gray-500">
-              {data.email && <span>{data.email}</span>}
+            <div className="flex flex-wrap justify-center gap-3 md:gap-6 mt-3 md:mt-4 text-xs md:text-sm text-gray-500">
+              {data.email && <span className="break-all">{data.email}</span>}
               {data.phone && <span>{data.phone}</span>}
               {data.location && <span>{data.location}</span>}
             </div>
