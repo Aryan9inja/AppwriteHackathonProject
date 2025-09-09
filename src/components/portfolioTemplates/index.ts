@@ -1,22 +1,22 @@
-export { default as ModernTemplate } from './ModernTemplate';
-export { default as CreativeTemplate } from './CreativeTemplate';
-export { default as MinimalTemplate } from './MinimalTemplate';
-export { default as TechTemplate } from './TechTemplate';
-export { ClassicPortfolioWebsite } from './classic';
+export { default as MinimalTemplate } from "./MinimalTemplate";
+export { ClassicPortfolioWebsite } from "./classic";
+export { ModernPortfolioWebsite } from "./modern";
+export { CreativePortfolioWebsite } from "./creative";
+export { TechPortfolioWebsite } from "./tech";
 
-import ModernTemplate from './ModernTemplate';
-import CreativeTemplate from './CreativeTemplate';
-import MinimalTemplate from './MinimalTemplate';
-import TechTemplate from './TechTemplate';
-import { ClassicPortfolioWebsite } from './classic';
+import MinimalTemplate from "./MinimalTemplate";
+import { ClassicPortfolioWebsite } from "./classic";
+import { ModernPortfolioWebsite } from "./modern";
+import { CreativePortfolioWebsite } from "./creative";
+import { TechPortfolioWebsite } from "./tech";
 
 // Template registry for easy access
 export const PORTFOLIO_TEMPLATES = {
-  modern: ModernTemplate,
+  modern: ModernPortfolioWebsite,
   classic: ClassicPortfolioWebsite,
-  creative: CreativeTemplate,
+  creative: CreativePortfolioWebsite,
   minimal: MinimalTemplate,
-  tech: TechTemplate,
+  tech: TechPortfolioWebsite,
 } as const;
 
 export type TemplateKey = keyof typeof PORTFOLIO_TEMPLATES;
@@ -24,33 +24,33 @@ export type TemplateKey = keyof typeof PORTFOLIO_TEMPLATES;
 // Template metadata for selection UI
 export const TEMPLATE_METADATA = {
   modern: {
-    name: 'Modern',
-    description: 'Clean design with gradients and cards',
-    preview: '/templates/modern-preview.jpg',
-    color: 'bg-gradient-to-br from-blue-500 to-purple-600',
+    name: "Modern",
+    description: "Multi-page modern portfolio with navigation",
+    preview: "/templates/modern-website-preview.jpg",
+    color: "bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500",
   },
   classic: {
-    name: 'Classic',
-    description: 'Multi-page professional portfolio website',
-    preview: '/templates/classic-preview.jpg',
-    color: 'bg-gradient-to-r from-blue-600 via-green-600 to-purple-600',
+    name: "Classic",
+    description: "Multi-page professional portfolio website",
+    preview: "/templates/classic-preview.jpg",
+    color: "bg-gradient-to-r from-blue-600 via-green-600 to-purple-600",
   },
   creative: {
-    name: 'Creative',
-    description: 'Vibrant and artistic design',
-    preview: '/templates/creative-preview.jpg',
-    color: 'bg-gradient-to-r from-pink-500 to-purple-500',
+    name: "Creative",
+    description: "Multi-page creative portfolio with vibrant design",
+    preview: "/templates/creative-website-preview.jpg",
+    color: "bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500",
   },
   minimal: {
-    name: 'Minimal',
-    description: 'Clean and simple typography-focused',
-    preview: '/templates/minimal-preview.jpg',
-    color: 'bg-white border-2 border-gray-300',
+    name: "Minimal",
+    description: "Clean and simple typography-focused",
+    preview: "/templates/minimal-preview.jpg",
+    color: "bg-white border-2 border-gray-300",
   },
   tech: {
-    name: 'Tech',
-    description: 'Terminal-inspired developer theme',
-    preview: '/templates/tech-preview.jpg',
-    color: 'bg-gray-900',
+    name: "Tech",
+    description: "Multi-page terminal-based portfolio with interactive CLI",
+    preview: "/templates/tech-multipage-preview.jpg",
+    color: "bg-gray-900 border-2 border-green-500",
   },
 } as const;
