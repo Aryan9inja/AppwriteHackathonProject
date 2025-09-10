@@ -148,18 +148,15 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-background via-muted/10 to-background">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-background dark:bg-black">
       <div className="w-full max-w-md mx-auto">
-        <div className="bg-card/80 backdrop-blur-sm shadow-2xl rounded-2xl p-6 sm:p-8 border border-border/50 transition-all duration-300 hover:shadow-3xl">
+        <div className="bg-card/90 dark:bg-gray-900/95 backdrop-blur-sm shadow-2xl rounded-2xl p-6 sm:p-8 border border-border/50 dark:border-gray-700/50 transition-all duration-300 hover:shadow-3xl dark:hover:shadow-2xl">
           {/* Header */}
           <div className="text-center mb-6 sm:mb-8">
-            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-primary to-secondary rounded-full mx-auto mb-4 flex items-center justify-center shadow-lg">
-              <LogIn className="w-6 h-6 sm:w-8 sm:h-8 text-primary-foreground" />
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground dark:text-white mb-2">
               Welcome Back
             </h1>
-            <p className="text-muted-foreground text-sm sm:text-base">
+            <p className="text-muted-foreground dark:text-gray-400 text-sm sm:text-base">
               Sign in to access your portfolio dashboard
             </p>
           </div>
@@ -170,7 +167,7 @@ const LoginForm = () => {
           >
             {/* Email Field */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground/80 block">
+              <label className="text-sm font-medium text-foreground/80 dark:text-gray-200 block">
                 Email Address
               </label>
               <div className="relative group">
@@ -186,9 +183,9 @@ const LoginForm = () => {
                       ? "border-error/50 focus:border-error focus:ring-error/20"
                       : "border-border/50 focus:border-primary focus:ring-primary/20"
                   } 
-                  bg-background/50 text-foreground
+                  bg-background/70 dark:bg-gray-800/70 text-foreground
                   placeholder:text-muted-foreground
-                  focus:bg-background hover:border-primary/30
+                  focus:bg-background dark:focus:bg-gray-800 hover:border-primary/30
                   focus:shadow-lg focus:shadow-primary/10`}
                 />
               </div>
@@ -202,7 +199,7 @@ const LoginForm = () => {
 
             {/* Password Field */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground/80 block">
+              <label className="text-sm font-medium text-foreground/80 dark:text-gray-200 block">
                 Password
               </label>
               <div className="relative group">
@@ -218,9 +215,9 @@ const LoginForm = () => {
                       ? "border-error/50 focus:border-error focus:ring-error/20"
                       : "border-border/50 focus:border-primary focus:ring-primary/20"
                   } 
-                  bg-background/50 text-foreground
+                  bg-background/70 dark:bg-gray-800/70 text-foreground
                   placeholder:text-muted-foreground
-                  focus:bg-background hover:border-primary/30
+                  focus:bg-background dark:focus:bg-gray-800 hover:border-primary/30
                   focus:shadow-lg focus:shadow-primary/10`}
                 />
                 <button
@@ -265,11 +262,11 @@ const LoginForm = () => {
           </form>
 
           <div className="mt-6 sm:mt-8 text-center">
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-muted-foreground dark:text-gray-400">
               Don't have an account?{" "}
               <span
                 onClick={()=>navigate("/signup")}
-                className="font-medium text-primary hover:text-primary-hover transition-colors duration-200 underline underline-offset-2 cursor-pointer"
+                className="font-medium text-primary hover:text-primary-hover dark:text-purple-400 dark:hover:text-purple-300 transition-colors duration-200 underline underline-offset-2 cursor-pointer"
               >
                 Create one here
               </span>

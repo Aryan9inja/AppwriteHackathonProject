@@ -23,14 +23,14 @@ const testimonials = [
 
 const Testimonials = () => {
   return (
-    <section className="px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+    <section className="px-4 sm:px-6 lg:px-8 py-16 sm:py-24 dark:bg-black">
       <div className="max-w-7xl mx-auto">
         {/* Heading */}
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
+          <h2 className="text-3xl sm:text-4xl font-bold text-foreground dark:text-white mb-4">
             Loved by Professionals
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-lg text-muted-foreground dark:text-gray-300 max-w-2xl mx-auto">
             Join thousands of professionals who've landed their dream jobs
           </p>
         </div>
@@ -42,6 +42,8 @@ const Testimonials = () => {
               key={index}
               className="bg-card/80 backdrop-blur-sm rounded-2xl p-6 border border-border/50 
                          shadow-lg hover:shadow-xl hover:border-primary/30
+                         dark:bg-gray-900 dark:border-gray-700 dark:hover:border-primary/40 
+                         dark:shadow-xl dark:hover:shadow-2xl
                          animate-in fade-in slide-in-from-bottom-6 duration-500"
               style={{ animationDelay: `${index * 200}ms` }}
             >
@@ -53,14 +55,14 @@ const Testimonials = () => {
               </div>
 
               {/* Content */}
-              <p className="text-muted-foreground mb-4 leading-relaxed">
+              <p className="text-muted-foreground dark:text-gray-300 mb-4 leading-relaxed">
                 "{testimonial.content}"
               </p>
 
               {/* Author */}
               <div>
-                <p className="font-semibold text-foreground">{testimonial.name}</p>
-                <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+                <p className="font-semibold text-foreground dark:text-white">{testimonial.name}</p>
+                <p className="text-sm text-muted-foreground dark:text-gray-400">{testimonial.role}</p>
               </div>
             </div>
           ))}
