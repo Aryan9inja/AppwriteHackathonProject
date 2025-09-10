@@ -46,27 +46,31 @@ const SignupForm = () => {
   };
 
   const onSubmit = async (data: SignUpFormData) => {
-    // show loading toast first
     const loadingToast = toast.loading("Creating your account...", {
       description: "Please wait while we set up your portfolio website.",
     });
 
     try {
-      await dispatch(registerUserThunk(data)).unwrap();
+      const result = await dispatch(registerUserThunk(data)).unwrap();
 
       toast.dismiss(loadingToast);
-      toast.success("Account created successfully!", {
-        description: "Welcome! Your portfolio website is ready to be built.",
-        duration: 5000,
-        action: {
-          label: "Continue",
-          onClick: () => navigate("/dashboard"),
-        },
-      });
+      
+      // ✅ Check if we got valid user data
+      if (result && result.user) {
+        toast.success("Account created successfully!", {
+          description: "Welcome! Your portfolio website is ready to be built.",
+          duration: 3000,
+        });
 
-      form.reset();
+        form.reset();
+        
+        // ✅ Navigate immediately since unwrap() ensures success
+        navigate("/dashboard", { replace: true });
+      } else {
+        throw new Error("Invalid user data received");
+      }
+      
     } catch (error: unknown) {
-      console.error(error);
       toast.dismiss(loadingToast);
 
       const err = error as { code?: number; message?: string };
@@ -278,12 +282,12 @@ const SignupForm = () => {
           <div className="mt-6 sm:mt-8 text-center">
             <p className="text-sm text-muted-foreground">
               Already have an account?{" "}
-              <a
-                href="#"
-                className="font-medium text-primary hover:text-primary-hover transition-colors duration-200 underline underline-offset-2"
+              <span
+                onClick={()=>navigate("/login")}
+                className="font-medium text-primary hover:text-primary-hover transition-colors duration-200 underline underline-offset-2 cursor-pointer"
               >
                 Sign in here
-              </a>
+              </span>
             </p>
           </div>
         </div>

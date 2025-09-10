@@ -54,7 +54,7 @@ const PortfolioViewer: React.FC = memo(() => {
           body: JSON.stringify({ portfolioId: id }),
         });
       } catch (err) {
-        console.error("Error incrementing view", err);
+        // Silently handle view increment errors
       }
     };
 
@@ -114,5 +114,4 @@ const PortfolioViewer: React.FC = memo(() => {
   return <TemplateComponent data={portfolio} />;
 });
 
-PortfolioViewer.displayName = "PortfolioViewer"; // For debugging
 export default PortfolioViewer;

@@ -1,15 +1,26 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { User, LogOut, Bell, Search, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { logoutUserThunk } from '@/store/thunks/authThunk';
 import type { AppDispatch } from '@/store/store';
+import { toast } from 'sonner';
 
 const DashboardHeader: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
-  const handleLogout = () => {
-    dispatch(logoutUserThunk());
+  const handleLogout = async () => {
+    try {
+      await dispatch(logoutUserThunk()).unwrap();
+      toast.success("Logged out successfully");
+      navigate("/", { replace: true });
+    } catch (error) {
+      toast.error("Failed to logout properly");
+      // Force navigation anyway to ensure user is logged out from UI
+      navigate("/", { replace: true });
+    }
   };
 
   return (

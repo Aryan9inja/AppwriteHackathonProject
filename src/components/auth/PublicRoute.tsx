@@ -11,7 +11,7 @@ const PublicRoute = memo(({ children }: PublicRouteProps) => {
   const isAuthenticated = useSelector(
     (state: RootState) => state.auth.isAuthenticated
   );
-  console.log("PublicRoute render");
+  
   return !isAuthenticated ? (
     <>{children}</>
   ) : (

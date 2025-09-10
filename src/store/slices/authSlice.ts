@@ -35,7 +35,7 @@ const authSlice = createSlice({
     },
     setUser: (state, action: PayloadAction<User | null>) => {
       state.user = action.payload;
-      state.isAuthenticated = !!action.payload;
+      state.isAuthenticated = !!action.payload; // ✅ Set to true only if user exists
     },
     setAccountUser: (
       state,
@@ -49,6 +49,7 @@ const authSlice = createSlice({
       state.userData = null;
       state.isAuthenticated = false;
       state.error = null;
+      localStorage.removeItem("userData"); // ✅ Clear localStorage
     },
   },
   extraReducers: (builder) => {
@@ -105,6 +106,8 @@ const authSlice = createSlice({
         state.userData = null;
         state.isAuthenticated = false;
         state.error = null;
+        // ✅ Ensure localStorage is cleared on logout
+        localStorage.removeItem("userData");
       })
       .addCase(logoutUserThunk.rejected, (state, action) => {
         state.loadingType = null;

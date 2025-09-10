@@ -18,7 +18,6 @@ export const uploadResume = async (file: File) => {
     });
     return uploadedResume.$id;
   } catch (error: unknown) {
-    console.log("Resume Upload Failed", error);
     throw error;
   }
 };
@@ -38,7 +37,6 @@ export const getPortfolioData = async (
     }
     return data;
   } catch (error) {
-    console.log("Could not get data", error);
     throw error;
   }
 };
@@ -62,7 +60,6 @@ export const savePortfolioData = async (
       },
     });
   } catch (error) {
-    console.error("Error saving Portfolio doc", error);
     throw error;
   }
 };
@@ -85,7 +82,6 @@ export const fetchPortfolio = async (
       selectedTemplate: doc.templateId,
     };
   } catch (error) {
-    console.error("Error fetching Portfolio doc", error);
     throw error;
   }
 };
@@ -112,7 +108,6 @@ export const createPortfolioFromScratch = async (
     });
     return doc.$id;
   } catch (error) {
-    console.error("Failed to create doc: ", error);
     throw error;
   }
 };
@@ -126,7 +121,6 @@ export const getUserPortfolios = async (userId: string) => {
     });
     return portfolios;
   } catch (error) {
-    console.error("Failed to get user portfolios: ", error);
     throw error;
   }
 };
@@ -138,7 +132,6 @@ export const deletePortfolio = async (portfolioId: string) => {
       body: JSON.stringify({ portfolioId }),
     });
   } catch (error) {
-    console.error("Failed to delete portfolio: ", error);
     throw error;
   }
 };

@@ -42,7 +42,6 @@ const LoginForm = () => {
   };
 
   const onSubmit = async (data: LoginFormData) => {
-    // show loading toast first
     const loadingToast = toast.loading("Signing you in...", {
       description: "Please wait while we authenticate your account.",
     });
@@ -54,20 +53,15 @@ const LoginForm = () => {
       toast.success("Welcome back!", {
         description: "You've been successfully signed in.",
         duration: 3000,
-        action: {
-          label: "Continue",
-          onClick: () => {
-            const redirectTo = location.state?.from?.pathname || "/dashboard";
-            navigate(redirectTo);
-          },
-        },
       });
 
-      // Redirect to intended route or dashboard
-      const redirectTo = location.state?.from?.pathname || "/dashboard";
-      navigate(redirectTo);
+      // ✅ Small delay to ensure state is updated
+      setTimeout(() => {
+        const redirectTo = location.state?.from?.pathname || "/dashboard";
+        navigate(redirectTo, { replace: true });
+      }, 100);
+      
     } catch (error: unknown) {
-      console.error(error);
       toast.dismiss(loadingToast);
 
       // Handle Appwrite specific errors
@@ -273,12 +267,12 @@ const LoginForm = () => {
           <div className="mt-6 sm:mt-8 text-center">
             <p className="text-sm text-muted-foreground">
               Don't have an account?{" "}
-              <a
-                href="#"
-                className="font-medium text-primary hover:text-primary-hover transition-colors duration-200 underline underline-offset-2"
+              <span
+                onClick={()=>navigate("/signup")}
+                className="font-medium text-primary hover:text-primary-hover transition-colors duration-200 underline underline-offset-2 cursor-pointer"
               >
                 Create one here
-              </a>
+              </span>
             </p>
           </div>
         </div>
