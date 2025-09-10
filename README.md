@@ -4,6 +4,10 @@
 
 An intelligent portfolio generator that uses AI to parse your resume and automatically create beautiful, professional portfolio websites. Built for the Appwrite Hackathon with cutting-edge technologies.
 
+Video showcasing some pages ->
+
+https://github.com/user-attachments/assets/4231fbf1-ddd4-4f00-b548-e774c29b4815
+
 ## ✨ Features
 
 ### 🤖 AI-Powered Resume Parsing
@@ -185,3 +189,4 @@ This project was built for the **Appwrite Sites Hackathon**, showcasing the powe
 ---
 
 **Made with ❤️ for the Appwrite Sites Hackathon**
+
