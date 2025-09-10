@@ -37,14 +37,6 @@ const Hero = () => {
             Create Your Portfolio
             <ArrowRight className="ml-2 w-5 h-5" />
           </Button>
-          <Button
-            variant="outline"
-            size="lg"
-            className="px-8 py-4 text-lg font-medium rounded-xl border-2 hover:bg-muted/20"
-          >
-            <Eye className="mr-2 w-5 h-5" />
-            View Examples
-          </Button>
         </div>
 
         {/* Trust Indicators */}
