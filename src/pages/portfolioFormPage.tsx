@@ -106,7 +106,6 @@ const PortfolioForm: React.FC = () => {
   useEffect(() => {
     const getAndSetInitialData = async () => {
       if (!docId || docId=="new") {
-        console.log("You")
         return;
       }
 
@@ -154,11 +153,9 @@ const PortfolioForm: React.FC = () => {
             },
           };
 
-          console.log("Form data to reset with:", formData);
           form.reset(formData);
         }
       } catch (error) {
-        console.error("Error fetching portfolio data:", error);
         if (error instanceof SyntaxError && error.message.includes("JSON")) {
           toast.error("AI working failed, try again or do manually");
         } else {
