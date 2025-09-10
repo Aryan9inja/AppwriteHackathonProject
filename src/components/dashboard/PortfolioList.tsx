@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Eye, Globe, Clock, ExternalLink, Edit, Trash2, Loader2 } from "lucide-react";
+import { Eye, Globe, Clock, ExternalLink, Edit, Trash2, Loader2, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { deletePortfolio } from "@/services/portfolio.services";
@@ -56,6 +56,32 @@ const PortfolioCard: React.FC<{ portfolio: Portfolio; index: number; onPortfolio
     navigate("/portfolio/create",{state:{docId:portfolio.$id}})
   }
 
+  const handleShare = async () => {
+    try {
+      // Create the portfolio URL (you can modify this URL structure as needed)
+      const portfolioUrl = `${import.meta.env.VITE_APP_URL}${portfolio.urlString}`;
+      
+      // Use the Web Share API if available (mobile devices)
+      if (navigator.share) {
+        await navigator.share({
+          title: portfolio.portfolioName,
+          text: `Check out my portfolio: ${portfolio.portfolioName}`,
+          url: portfolioUrl,
+        });
+        toast.success("Portfolio shared successfully!");
+      } else {
+        // Fallback: copy to clipboard
+        await navigator.clipboard.writeText(portfolioUrl);
+        toast.success("Portfolio URL copied to clipboard!");
+      }
+    } catch (error) {
+      // If sharing fails or user cancels
+      if (error instanceof Error && error.name !== 'AbortError') {
+        toast.error("Failed to share portfolio");
+      }
+    }
+  }
+
   return (
     <div
       className={`bg-card border border-border rounded-lg sm:rounded-xl p-3 sm:p-4 hover:shadow-lg transition-all duration-300 animate-slide-in group touch-manipulation ${
@@ -69,19 +95,30 @@ const PortfolioCard: React.FC<{ portfolio: Portfolio; index: number; onPortfolio
             <h3 className="font-semibold text-foreground truncate text-sm sm:text-base group-hover:text-primary transition-colors flex-1">
               {portfolio.portfolioName}
             </h3>
-            <Button
-              onClick={handleDelete}
-              size="sm"
-              variant="ghost"
-              disabled={isDeleting}
-              className="h-6 w-6 p-0 text-muted-foreground hover:text-destructive hover:bg-destructive/10 ml-2 flex-shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isDeleting ? (
-                <Loader2 className="w-3 h-3 animate-spin" />
-              ) : (
-                <Trash2 className="w-3 h-3" />
-              )}
-            </Button>
+            <div className="flex gap-1 ml-2">
+              <Button
+                onClick={handleShare}
+                size="sm"
+                variant="ghost"
+                disabled={isDeleting}
+                className="h-6 w-6 p-0 text-muted-foreground hover:text-primary hover:bg-primary/10 flex-shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Share2 className="w-3 h-3" />
+              </Button>
+              <Button
+                onClick={handleDelete}
+                size="sm"
+                variant="ghost"
+                disabled={isDeleting}
+                className="h-6 w-6 p-0 text-muted-foreground hover:text-destructive hover:bg-destructive/10 flex-shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isDeleting ? (
+                  <Loader2 className="w-3 h-3 animate-spin" />
+                ) : (
+                  <Trash2 className="w-3 h-3" />
+                )}
+              </Button>
+            </div>
           </div>
           <div className="flex items-center flex-wrap gap-2 sm:gap-3 mt-1">
             <div className="flex items-center space-x-1">
