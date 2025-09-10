@@ -1,0 +1,12 @@
+{
+  "version": "1.0",
+  "site": {
+    "redirects": [
+      {
+        "source": "/*",
+        "destination": "/index.html",
+        "type": "rewrite"
+      }
+    ]
+  }
+}
