@@ -21,15 +21,26 @@ const PersistingAuth = ({ children }: PersistingAuthProps) => {
         const storedUserData = localStorage.getItem("userData");
         if (storedUserData && !isAuthenticated) {
           const userData = JSON.parse(storedUserData);
+          
+          // ✅ Check for the correct structure: { user, userDoc }
           if (userData && userData.user && userData.user.userId) {
+            // ✅ Dispatch the entire user data with proper structure
             dispatch(setUser(userData.user));
+          } else {
+            // ✅ If data structure is invalid, remove it
+            localStorage.removeItem("userData");
           }
+        } else if (!storedUserData && isAuthenticated) {
+          // ✅ Edge case: Redux thinks user is authenticated but no localStorage
+          dispatch(setUser(null));
         }
       } catch (error) {
         localStorage.removeItem("userData");
-        console.error("Invalid user data in localStorage:", error);
+        // ✅ Clear Redux state too if localStorage data was corrupted
+        dispatch(setUser(null));
+      } finally {
+        setIsChecking(false); // ✅ Always set checking to false
       }
-      setIsChecking(false);
     };
     checkAuth();
   }, [dispatch, isAuthenticated]);
