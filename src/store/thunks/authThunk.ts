@@ -15,9 +15,19 @@ export const registerUserThunk = createAsyncThunk(
     try {
       await registerUser(formData);
       const userData = await getUserData();
+      
+      // ✅ Check if userData is valid before proceeding
+      if (!userData || !userData.user) {
+        throw new Error("Failed to fetch user data after registration");
+      }
+      
+      // ✅ Save to localStorage for persistence
+      localStorage.setItem("userData", JSON.stringify(userData));
       return userData;
     } catch (error: unknown) {
       const err = error as { message?: string };
+      // ✅ Clear any partial data from localStorage on error
+      localStorage.removeItem("userData");
       return rejectWithValue(err.message || "Registration failed");
     }
   }
@@ -30,10 +40,18 @@ export const loginUserThunk = createAsyncThunk(
     try {
       await loginUser(formData);
       const userData = await getUserData();
+      
+      // ✅ Check if userData is valid before proceeding
+      if (!userData || !userData.user) {
+        throw new Error("Failed to fetch user data after login");
+      }
+      
       localStorage.setItem("userData", JSON.stringify(userData));
       return userData;
     } catch (error: unknown) {
       const err = error as { message?: string };
+      // ✅ Clear any partial data from localStorage on error
+      localStorage.removeItem("userData");
       return rejectWithValue(err.message || "Login failed");
     }
   }
@@ -45,10 +63,12 @@ export const logoutUserThunk = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       await logout();
-      localStorage.removeItem("userData")
+      localStorage.removeItem("userData");
       return null;
     } catch (error: unknown) {
       const err = error as { message?: string };
+      // ✅ Clear localStorage even on error to ensure clean state
+      localStorage.removeItem("userData");
       return rejectWithValue(err.message || "Logout failed");
     }
   }
@@ -60,14 +80,22 @@ export const getUserDataThunk = createAsyncThunk(
   async (_, { getState, rejectWithValue }) => {
     const state = getState() as RootState;
     if (state.auth.user) {
-      return state.auth; // Skip if already loaded
+      return { user: state.auth.user, userDoc: state.auth.userData }; // Return existing data
     }
     try {
-      const user = await getUserData();
-      localStorage.setItem("userData", JSON.stringify(user));
-      return user;
+      const userData = await getUserData();
+      
+      // ✅ Check if userData is valid
+      if (!userData || !userData.user) {
+        throw new Error("No valid user data found");
+      }
+      
+      localStorage.setItem("userData", JSON.stringify(userData));
+      return userData;
     } catch (error: unknown) {
       const err = error as { message?: string };
+      // ✅ Clear localStorage on error
+      localStorage.removeItem("userData");
       return rejectWithValue(err?.message || "Failed to fetch user");
     }
   }
