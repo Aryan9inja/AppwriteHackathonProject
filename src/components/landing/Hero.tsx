@@ -6,16 +6,16 @@ const Hero = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="relative px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
+    <section className="relative px-4 sm:px-6 lg:px-8 py-12 sm:py-20 dark:bg-black">
       <div className="max-w-7xl mx-auto text-center relative z-10">
         <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-foreground mb-6 leading-tight">
           Transform Your{" "}
-          <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent animate-pulse">
+          <span className="text-primary dark:text-purple-400">
             Resume
           </span>
           <br />
           Into a Stunning{" "}
-          <span className="bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent">
+          <span className="text-secondary dark:text-pink-400">
             Portfolio
           </span>
         </h1>
@@ -29,10 +29,10 @@ const Hero = () => {
           <Button
             size="lg"
             onClick={() => navigate("/signup")}
-            className="bg-gradient-to-r from-primary to-secondary hover:from-primary-hover hover:to-secondary-hover 
-                     text-primary-foreground px-8 py-4 text-lg font-semibold rounded-xl
+            className="bg-primary hover:bg-primary-hover text-primary-foreground px-8 py-4 text-lg font-semibold rounded-xl
                      transform hover:scale-105 transition-all duration-300
-                     shadow-lg hover:shadow-xl hover:shadow-primary/25"
+                     shadow-lg hover:shadow-xl hover:shadow-primary/25
+                     dark:shadow-primary/20 dark:hover:shadow-primary/30"
           >
             Create Your Portfolio
             <ArrowRight className="ml-2 w-5 h-5" />
