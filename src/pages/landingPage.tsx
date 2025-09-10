@@ -8,7 +8,7 @@ import Footer from "@/components/landing/Footer";
 
 const LandingPage = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/5 to-background overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-background via-muted/5 to-background overflow-hidden dark:bg-black">
       <Navbar />
       <Hero />
       <HowItWorks />
