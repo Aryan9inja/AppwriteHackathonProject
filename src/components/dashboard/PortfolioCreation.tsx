@@ -84,7 +84,6 @@ const PortfolioCreation: React.FC = () => {
 
       navigate(`/portfolio/create`,{state:{docId:resAsJson.docId}});
     } catch (error) {
-      console.error("Error processing resume:", error);
       toast.error("AI parsing failed")
     } finally {
       setIsUploading(false);
